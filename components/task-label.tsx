@@ -58,10 +58,10 @@ export function Dropdown({
     <div className={className || "content-stretch flex flex-col items-center justify-center relative w-[368px]"}>
       <div className="border-2 border-black border-solid content-stretch flex items-center justify-center px-[12px] py-[8px] relative rounded-[24px] shrink-0 w-full gap-[10px]">
         {/* Clock Icon */}
-        <div className="relative shrink-0 size-[24px]">
-          <div className="absolute inset-[12.5%]">
-            <img alt="Time" className="absolute block inset-0 max-w-none size-full" src={imgSubtract} />
-          </div>
+        <div className="flex items-center justify-center shrink-0 size-[24px]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#151515" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 6V12.25L16.25 15.25L15 17L10.5 13.5V6H12Z" />
+          </svg>
         </div>
 
         {/* Task Text */}
@@ -69,17 +69,19 @@ export function Dropdown({
           {task}
         </div>
 
-        {/* Dropdown Icon
+        {/* Dropdown Icon */}
         <button
-          onClick={onDropdownClick}
-          className="relative shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            onDropdownClick?.();
+          }}
+          className="flex items-center justify-center shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
         >
-          <div className="absolute bottom-[37.5%] left-1/4 right-1/4 top-[37.5%]">
-            <div className="flex items-center justify-center -scale-x-100 h-full">
-              <img alt="Dropdown" className="block max-w-none" src={imgVector9} />
-            </div>
-          </div>
-        </button> */}
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9L12 15L18 9" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
 
       {/* Label */}
@@ -112,10 +114,15 @@ export function EditLabel({
     <div className={className || "content-stretch flex flex-col items-center justify-center relative w-[368px]"}>
       <div className="border-2 border-black border-solid content-stretch flex items-center justify-center px-[12px] py-[8px] relative rounded-[24px] shrink-0 w-full gap-[10px]">
         {/* Drag Handle Icon */}
-        <div className="overflow-clip relative shrink-0 size-[24px]">
-          <div className="absolute inset-[16.67%_33.33%]">
-            <img alt="Drag" className="block max-w-none size-full" src={imgVector} />
-          </div>
+        <div className="flex items-center justify-center shrink-0 size-[24px]">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#151515" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="5" r="2" />
+            <circle cx="9" cy="12" r="2" />
+            <circle cx="9" cy="19" r="2" />
+            <circle cx="15" cy="5" r="2" />
+            <circle cx="15" cy="12" r="2" />
+            <circle cx="15" cy="19" r="2" />
+          </svg>
         </div>
 
         {/* Task Text */}
@@ -125,26 +132,35 @@ export function EditLabel({
 
         {/* Edit Icon */}
         <button
-          onClick={onEdit}
-          className="relative shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            onEdit?.();
+          }}
+          className="flex items-center justify-center shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
         >
-          <div className="absolute inset-[15.95%_15.95%_12.85%_12.85%]">
-            <img alt="Edit" className="absolute block inset-0 max-w-none size-full" src={imgSubtract1} />
-          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
 
         {/* Delete/Trash Icon */}
-        {/* <button
-          onClick={onDelete}
-          className="relative shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            onDelete?.();
+          }}
+          className="flex items-center justify-center shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
         >
-          <div className="absolute bottom-[12.5%] left-[12.5%] right-[12.5%] top-1/4">
-            <img alt="Trash" className="absolute block inset-0 max-w-none size-full" src={imgGroup21} />
-          </div>
-          <div className="absolute flex inset-[12.5%_41.67%_83.33%_41.67%] items-center justify-center">
-            <img alt="" className="block max-w-none" src={imgEllipse45} />
-          </div>
-        </button> */}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6H5H21" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M10 11V17" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M14 11V17" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   );

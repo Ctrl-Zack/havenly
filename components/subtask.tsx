@@ -5,11 +5,12 @@ import { useState } from 'react';
 type SubtaskProps = {
   className?: string;
   onAddClick?: () => void;
+  showLabel?: boolean;
 };
 
 const addIcon = "https://www.figma.com/api/mcp/asset/11262d72-590a-4011-a0fb-af9cadfd4cd3";
 
-export function Subtask({ className, onAddClick }: SubtaskProps) {
+export function Subtask({ className, onAddClick, showLabel = true }: SubtaskProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -18,23 +19,25 @@ export function Subtask({ className, onAddClick }: SubtaskProps) {
       data-node-id="333:2358"
     >
       {/* Floating Label */}
-      <div className="absolute left-5 top-0 bg-[#fcfee8] px-1 -translate-y-1/2 z-10">
-        <span className="text-[12px] font-normal leading-4 text-[#151515] font-['Poppins']">
-          Subtask
-        </span>
-      </div>
+      {showLabel && (
+        <div className="absolute left-5 top-0 bg-[#F2EAE0] px-1 -translate-y-1/2 z-10">
+          <span className="text-[12px] font-normal leading-4 text-[#1A1A1A] font-['Poppins']">
+            Subtask
+          </span>
+        </div>
+      )}
 
       {/* Main Container */}
-      <div className="border-2 border-solid border-black rounded-[24px] pt-6 pb-6 px-0 flex items-center">
+      <div className="border-2 border-solid border-[#1A1A1A] rounded-[24px] pt-6 pb-6 px-0 flex items-center">
         {/* Input Field */}
         <button
           onClick={onAddClick}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="flex items-center justify-center gap-[10px] h-[45px] mx-4 flex-1 border-2 border-dashed border-black rounded-[19px] px-4 transition-all duration-200 hover:bg-gray-200 active:bg-gray-100 cursor-pointer"
+          className="flex items-center justify-center gap-[10px] h-[45px] mx-4 flex-1 border-2 border-dashed border-[#1A1A1A] rounded-[19px] px-4 transition-all duration-200 hover:bg-black/5 active:bg-black/10 cursor-pointer"
           data-node-id="333:2359"
         >
-          <span className="text-[14px] font-normal leading-[18px] text-black font-['Poppins'] whitespace-nowrap">
+          <span className="text-[14px] font-normal leading-[18px] text-[#1A1A1A] font-['Poppins'] whitespace-nowrap">
             ADD SUB-TASK
           </span>
           <div

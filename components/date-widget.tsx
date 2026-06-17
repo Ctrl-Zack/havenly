@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -44,6 +44,16 @@ export default function DateWidget() {
   
   const selectedDayObj = calendar.days.find(d => d.dateString === selectedDate);
   const displayTitle = selectedDayObj ? selectedDayObj.fullDate.toLocaleDateString('en-US', { weekday: 'long' }) : calendar.title;
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <section className="max-w-md rounded-[40px] bg-white p-6 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)] min-h-[160px]" />; // Skeleton
+  }
 
   return (
     <section className="max-w-md rounded-[40px] bg-white p-6 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)]">

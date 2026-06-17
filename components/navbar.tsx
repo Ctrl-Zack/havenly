@@ -1,15 +1,39 @@
 'use client';
 
 import Link from "next/link";
+import React from "react";
 
-const imgHomeFill = "http://localhost:3845/assets/c0dbf036729af9c9b8670e044ad43b0e746094d5.svg";
-const imgHourglassFill = "http://localhost:3845/assets/1dcdd9c83718831e9b6fba17a7c156cce68d02ef.svg";
-const imgGroupFill = "http://localhost:3845/assets/7c107ed525406b33effd7ee357f33c1383f17ed6.svg";
-const imgUserAltFill = "http://localhost:3845/assets/c57a16f83d68c78e177595fd347c250f4d29c724.svg";
-const imgHomeFill1 = "http://localhost:3845/assets/4fa9911f17786d3e03e2a219dba48378a809d333.svg";
-const imgHourglassFill1 = "http://localhost:3845/assets/f8bf32cbba9e86a949d464ba9b8dc43860977a44.svg";
-const imgGroupFill1 = "http://localhost:3845/assets/5aacb442726ba20ea44e43157380640161b053fa.svg";
-const imgUserAltFill1 = "http://localhost:3845/assets/5b2138f08282a408ac291fb277d4da68206306b2.svg";
+function HomeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 3L4 9v12h5v-7h6v7h5V9z" />
+    </svg>
+  );
+}
+
+function HourglassIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M6 2h12v6l-4 4 4 4v6H6v-6l4-4-4-4V2z" />
+    </svg>
+  );
+}
+
+function SpacesIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05.02.01.03.03.04.04 1.14.83 1.93 1.94 1.93 3.41V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+    </svg>
+  );
+}
+
+function MeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+    </svg>
+  );
+}
 
 type NavbarProps = {
   className?: string;
@@ -18,89 +42,48 @@ type NavbarProps = {
 };
 
 export default function Navbar({ className = "", menu = "Home", theme = "Dark" }: NavbarProps) {
-  const isDarkAndFocus = theme === "Dark" && menu === "Focus";
-  const isDarkAndMe = theme === "Dark" && menu === "Me";
-  const isDarkAndSpaces = theme === "Dark" && menu === "Spaces";
-  const isFocus = menu === "Focus";
-  const isFocusOrSpacesOrMe = ["Focus", "Spaces", "Me"].includes(menu);
-  const isLightAndFocus = theme === "Light" && menu === "Focus";
-  const isLightAndHome = theme === "Light" && menu === "Home";
-  const isLightAndMe = theme === "Light" && menu === "Me";
-  const isLightAndSpaces = theme === "Light" && menu === "Spaces";
-  const isMe = menu === "Me";
-  const isSpaces = menu === "Spaces";
+  const navbarBg = theme === "Dark" ? "bg-[#292929]" : "bg-[#1A1A1A]";
+  const activeIconColor = "text-[#818CF8]"; 
+  const inactiveIconColor = "text-[#E5E7EB] opacity-80 hover:opacity-100 hover:text-white";
+  const activeCircleBg = "bg-black"; 
+  const hoverCircleBg = "hover:bg-black/30";
+
+  const navItems = [
+    { id: "Home", href: "/menu/home", icon: HomeIcon },
+    { id: "Focus", href: "/menu/focus", icon: HourglassIcon },
+    { id: "Spaces", href: "/menu/spaces", icon: SpacesIcon },
+    { id: "Me", href: "/menu/me", icon: MeIcon },
+  ];
 
   return (
-    <div
-      className={`flex gap-11.25 h-16 items-start pl-1 pr-1.25 py-1 relative rounded-4xl w-92 ${theme === "Light" ? "bg-[#1a1a1a]" : ""} ${className}`}
-      style={
-        theme === "Dark"
-          ? {
-              backgroundImage:
-                "linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgb(41, 41, 41) 0%, rgb(41, 41, 41) 100%)",
-            }
-          : undefined
-      }
+    <nav 
+      className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-2 w-[368px] h-[64px] rounded-[32px] shadow-2xl backdrop-blur-md transition-colors duration-300 ${navbarBg} ${className}`}
+      aria-label="Main Navigation"
     >
-      <Link
-        href="/menu/home"
-        className="inline-grid grid-cols-[max-content] grid-rows-[max-content] place-items-start relative shrink-0"
-        aria-label="Home"
-      >
-        <div className={`relative rounded-[30px] row-1 col-1 w-14 h-14 ${isFocusOrSpacesOrMe ? "" : "bg-black"}`} />
-        <div className="relative row-1 col-1 ml-4 mt-4 w-6 h-6">
-          <img
-            alt="Home"
-            className="absolute inset-0 block max-w-none h-full w-full"
-            src={isFocusOrSpacesOrMe ? imgHomeFill1 : imgHomeFill}
-          />
-        </div>
-      </Link>
-
-      <Link
-        href="/menu/focus"
-        className="inline-grid grid-cols-[max-content] grid-rows-[max-content] place-items-start relative shrink-0"
-        aria-label="Focus"
-      >
-        <div className={`relative rounded-[30px] row-1 col-1 w-14 h-14 ${isFocus ? "bg-black" : ""}`} />
-        <div className="relative row-1 col-1 ml-4 mt-4 w-6 h-6">
-          <img
-            alt="Focus"
-            className="absolute inset-0 block max-w-none h-full w-full"
-            src={isFocus ? imgHourglassFill1 : imgHourglassFill}
-          />
-        </div>
-      </Link>
-
-      <Link
-        href="/menu/spaces"
-        className="inline-grid grid-cols-[max-content] grid-rows-[max-content] place-items-start relative shrink-0"
-        aria-label="Spaces"
-      >
-        <div className={`relative rounded-[30px] row-1 col-1 w-14 h-14 ${isSpaces ? "bg-black" : ""}`} />
-        <div className="relative row-1 col-1 ml-4 mt-4 w-6 h-6">
-          <img
-            alt="Spaces"
-            className="absolute inset-0 block max-w-none h-full w-full"
-            src={isSpaces ? imgGroupFill1 : imgGroupFill}
-          />
-        </div>
-      </Link>
-
-      <Link
-        href="/menu/me"
-        className="inline-grid grid-cols-[max-content] grid-rows-[max-content] place-items-start relative shrink-0"
-        aria-label="Me"
-      >
-        <div className={`relative rounded-[30px] row-1 col-1 w-14 h-14 ${isMe ? "bg-black" : ""}`} />
-        <div className="relative row-1 col-1 ml-4 mt-4 w-6 h-6">
-          <img
-            alt="Me"
-            className="absolute inset-0 block max-w-none h-full w-full"
-            src={isMe ? imgUserAltFill1 : imgUserAltFill}
-          />
-        </div>
-      </Link>
-    </div>
+      {navItems.map((item) => {
+        const isActive = menu === item.id;
+        const Icon = item.icon;
+        
+        return (
+          <Link
+            key={item.id}
+            href={item.href}
+            className={`relative flex items-center justify-center w-[56px] h-[56px] rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
+              isActive ? activeCircleBg : hoverCircleBg
+            }`}
+            aria-label={item.id}
+            aria-current={isActive ? "page" : undefined}
+          >
+            <Icon 
+              className={`w-[24px] h-[24px] transition-all duration-300 ${
+                isActive 
+                  ? `${activeIconColor} scale-110 drop-shadow-[0_0_8px_rgba(129,140,248,0.4)]` 
+                  : `${inactiveIconColor} hover:scale-105`
+              }`} 
+            />
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

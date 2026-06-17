@@ -1,5 +1,15 @@
+'use client';
 import Button from "../components/button";
 import DateWidget from "../components/date-widget";
+import {
+  TextLabel,
+  Dropdown,
+  EditLabel,
+} from "../components/task-label";
+
+import { RoomsList } from '@/components/rooms';
+import {useState} from 'react';
+import { Subtask } from "../components/subtask";
 
 const variants = [
   { label: "Danger", variant: "Danger" as const },
@@ -12,6 +22,8 @@ const variants = [
 const states = ["Disabled", "Default", "Active"] as const;
 
 export default function Home() {
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 px-6 py-12 md:px-10">
@@ -25,6 +37,56 @@ export default function Home() {
 
         <div className="flex flex-col gap-10">
           <DateWidget />
+
+         <div className="max-w-7xl">
+                  <h1 className="text-2xl md:text-3xl font-semibold mb-2">Discover Rooms</h1>
+                  <p className="text-gray-300">Join a space and connect with others</p>
+        
+                {/* Room Grid */}
+                <RoomsList
+                  onRoomSelect={(roomId) => {
+                    setSelectedRoom(roomId);
+                  }}
+                />
+          </div>
+
+
+        <section className="space-y-6 bg-white">
+
+            <h2 className="text-xl font-bold text-black">
+              Task Label Variants
+            </h2>
+
+            <TextLabel
+              label="Current Task"
+              task="Open the Document"
+            />
+
+            <Dropdown
+              label="Current Task"
+              task="Open the Document"
+              onDropdownClick={() => {
+                console.log("dropdown");
+              }}
+            />
+
+            <EditLabel
+              task="Open the Document"
+              onEdit={() => {
+                console.log("edit");
+              }}
+              onDelete={() => {
+                console.log("delete");
+              }}
+            />
+
+          <h2 className="text-xl font-bold text-black">
+            Task Components
+          </h2>
+
+          <Subtask />
+          
+          </section>
 
           <div className="space-y-8">
             {variants.map((item) => (

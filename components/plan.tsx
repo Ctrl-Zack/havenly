@@ -1,10 +1,10 @@
 'use client';
 
-export function Plan({ className }: { className?: string }) {
+export function Plan({ className, onAddClick }: { className?: string; onAddClick?: () => void }) {
   return (
-    <div className={`relative w-[368px] h-[190px] ${className || ""}`}>
+    <div className={`relative w-full max-w-[400px] aspect-[368/190] ${className || ""}`}>
       {/* SVG Background with Cutout */}
-      <svg width="368" height="190" viewBox="0 0 368 190" className="absolute top-0 left-0 pointer-events-none z-0">
+      <svg width="100%" height="100%" viewBox="0 0 368 190" preserveAspectRatio="none" className="absolute top-0 left-0 pointer-events-none z-0">
         <defs>
           <clipPath id="plan-card-clip">
             <path d="M40 0 H328 A40 40 0 0 1 368 40 V111.36 A 56 56 0 0 0 289.36 190 H40 A40 40 0 0 1 0 150 V40 A40 40 0 0 1 40 0 Z" />
@@ -22,7 +22,7 @@ export function Plan({ className }: { className?: string }) {
       </svg>
 
       {/* Top Left Icon Blob */}
-      <div className="absolute top-[16px] left-[16px] z-10 size-[56px] rounded-full bg-[#f6c95a] flex items-center justify-center">
+      <div className="absolute top-[8.4%] left-[4.3%] z-10 w-[15.2%] aspect-square rounded-full bg-[#f6c95a] flex items-center justify-center">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="5" y="5" width="14" height="16" rx="2" fill="#151515"/>
           <rect x="9" y="3" width="6" height="4" rx="1" fill="#151515"/>
@@ -32,8 +32,8 @@ export function Plan({ className }: { className?: string }) {
       </div>
 
       {/* Text Content */}
-      <div className="absolute top-[80px] left-[24px] flex flex-col z-10">
-        <h2 className="font-serif text-[28px] font-semibold text-[#151515] leading-[1.1] tracking-tight">
+      <div className="absolute top-[42%] left-[6.5%] flex flex-col z-10">
+        <h2 className="font-serif text-[clamp(24px,7vw,28px)] font-semibold text-[#151515] leading-[1.1] tracking-tight">
           What's your plan?
         </h2>
         <p className="font-sans text-[14px] text-[#151515]/80 mt-[8px] max-w-[220px] leading-snug">
@@ -47,11 +47,15 @@ export function Plan({ className }: { className?: string }) {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log("Add plan clicked");
+          if (onAddClick) {
+            onAddClick();
+          } else {
+            console.log("Add plan clicked");
+          }
         }}
-        className="absolute bottom-[-5px] right-[-4px] z-20 flex size-[88px] items-center justify-center rounded-full bg-[#151515] text-white hover:bg-black hover:scale-105 active:scale-95 transition-all shadow-xl focus:outline-none focus:ring-4 focus:ring-black/20 cursor-pointer"
+        className="absolute bottom-0 right-0 z-20 flex w-[21.7%] aspect-square items-center justify-center rounded-[40px] bg-[#151515] text-white hover:bg-black hover:scale-105 active:scale-95 transition-all shadow-xl focus:outline-none focus:ring-4 focus:ring-black/20 cursor-pointer"
       >
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="40%" height="40%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>

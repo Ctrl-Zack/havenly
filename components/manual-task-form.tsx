@@ -17,11 +17,7 @@ const FieldWrapper = ({ label, children }: { label: string, children: React.Reac
   </div>
 );
 
-type ManualTaskFormProps = {
-  onSubmit?: () => void;
-};
-
-export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
+export function ManualTaskForm({ onSubmit }: { onSubmit?: () => void }) {
   // Form State
   const [taskName, setTaskName] = useState('');
   const [timeOfDay, setTimeOfDay] = useState('Morning');
@@ -30,6 +26,21 @@ export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
   const [endDate, setEndDate] = useState('2026-06-08');
   const [endTime, setEndTime] = useState('17:02');
   const [repeat, setRepeat] = useState('Never');
+  
+  // Subtasks State
+  const [subtasks, setSubtasks] = useState<{id: string, title: string, order: number}[]>([]);
+
+  const addSubtask = () => {
+    setSubtasks([...subtasks, { id: Date.now().toString(), title: '', order: subtasks.length + 1 }]);
+  };
+
+  const updateSubtask = (id: string, title: string) => {
+    setSubtasks(subtasks.map(st => st.id === id ? { ...st, title } : st));
+  };
+
+  const removeSubtask = (id: string) => {
+    setSubtasks(subtasks.filter(st => st.id !== id));
+  };
 
   return (
     <div className="w-full flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -39,7 +50,7 @@ export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
       </h2>
 
       {/* Form Fields Container */}
-      <div className="w-full max-w-[348px] flex flex-col gap-1">
+      <div className="w-full flex flex-col gap-1 px-1">
         
         {/* Task Name */}
         <FieldWrapper label="Task name">
@@ -73,68 +84,48 @@ export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
         </FieldWrapper>
 
         {/* Starts Row */}
-        <div className="flex gap-4">
-          <div className="flex-[3]">
+        <div className="flex gap-3">
+          <div className="flex-1 min-w-0">
             <FieldWrapper label="Starts">
-              <svg className="w-5 h-5 mr-3 text-[#1A1A1A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
               <input 
                 type="date" 
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full h-full bg-transparent outline-none text-[#1A1A1A] text-[14px]"
+                className="w-full h-full min-w-0 bg-transparent outline-none text-[#1A1A1A] text-[13px] sm:text-[14px]"
               />
             </FieldWrapper>
           </div>
-          <div className="flex-[2]">
+          <div className="flex-1 min-w-0">
             <FieldWrapper label="Start time">
-              <svg className="w-5 h-5 mr-3 text-[#1A1A1A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
               <input 
                 type="time" 
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full h-full bg-transparent outline-none text-[#1A1A1A] text-[14px]"
+                className="w-full h-full min-w-0 bg-transparent outline-none text-[#1A1A1A] text-[13px] sm:text-[14px]"
               />
             </FieldWrapper>
           </div>
         </div>
 
         {/* Ends Row */}
-        <div className="flex gap-4">
-          <div className="flex-[3]">
+        <div className="flex gap-3">
+          <div className="flex-1 min-w-0">
             <FieldWrapper label="Ends">
-              <svg className="w-5 h-5 mr-3 text-[#1A1A1A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
               <input 
                 type="date" 
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full h-full bg-transparent outline-none text-[#1A1A1A] text-[14px]"
+                className="w-full h-full min-w-0 bg-transparent outline-none text-[#1A1A1A] text-[13px] sm:text-[14px]"
               />
             </FieldWrapper>
           </div>
-          <div className="flex-[2]">
+          <div className="flex-1 min-w-0">
             <FieldWrapper label="End time">
-              <svg className="w-5 h-5 mr-3 text-[#1A1A1A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
               <input 
                 type="time" 
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full h-full bg-transparent outline-none text-[#1A1A1A] text-[14px]"
+                className="w-full h-full min-w-0 bg-transparent outline-none text-[#1A1A1A] text-[13px] sm:text-[14px]"
               />
             </FieldWrapper>
           </div>
@@ -165,10 +156,62 @@ export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
           </svg>
         </FieldWrapper>
 
-        {/* Subtask */}
-        <div className="mt-4 -ml-1">
-          <Subtask className="w-full" onAddClick={() => console.log('Add subtask')} showLabel={false} />
-        </div>
+        {/* Subtasks Section */}
+        {subtasks.length === 0 ? (
+          <div className="mt-4 -ml-1">
+            <Subtask className="w-full" onAddClick={addSubtask} showLabel={false} />
+          </div>
+        ) : (
+          <div className="mt-6 w-full flex flex-col">
+            <h3 className="font-['Poppins',sans-serif] text-[14px] font-semibold text-[#1A1A1A] mb-3 ml-1">
+              Subtasks
+            </h3>
+            
+            <div className="flex flex-col gap-3">
+              {subtasks.map((st, index) => (
+                <div key={st.id} className="flex items-center gap-3 group">
+                  {/* Number */}
+                  <span className="w-4 text-[14px] font-medium font-['Poppins',sans-serif] text-[#1A1A1A] text-right shrink-0">
+                    {index + 1}.
+                  </span>
+                  
+                  {/* Input styled like other fields */}
+                  <div className="flex-1 border border-[#1A1A1A] rounded-[24px] h-[48px] flex items-center px-4 overflow-hidden focus-within:ring-2 focus-within:ring-black/10 transition-shadow bg-transparent">
+                    <input
+                      type="text"
+                      value={st.title}
+                      onChange={(e) => updateSubtask(st.id, e.target.value)}
+                      placeholder="Enter subtask..."
+                      className="w-full h-full bg-transparent border-none outline-none text-[14px] font-['Poppins',sans-serif] text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
+                    />
+                  </div>
+                  
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => removeSubtask(st.id)}
+                    className="w-[40px] h-[40px] flex items-center justify-center rounded-full text-[#1A1A1A]/40 hover:text-red-500 hover:bg-red-50 active:bg-red-100 transition-colors shrink-0"
+                    title="Remove subtask"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={addSubtask}
+              className="mt-3 flex items-center gap-2 text-[#418B7E] font-semibold text-[14px] font-['Poppins',sans-serif] hover:text-[#3A7C70] w-fit py-1 transition-colors"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Another Subtask
+            </button>
+          </div>
+        )}
 
       </div>
 
@@ -177,7 +220,7 @@ export function ManualTaskForm({ onSubmit }: ManualTaskFormProps) {
 
       {/* Submit Button */}
       <button
-        className="w-full max-w-[348px] h-[56px] shrink-0 bg-[#418B7E] rounded-full flex items-center justify-center gap-2 hover:bg-[#3A7C70] active:bg-[#102321] transition-colors focus:outline-none focus:ring-4 focus:ring-[#418B7E]/20"
+        className="w-full h-[56px] shrink-0 bg-[#418B7E] rounded-full flex items-center justify-center gap-2 hover:bg-[#3A7C70] active:bg-[#102321] transition-colors focus:outline-none focus:ring-4 focus:ring-[#418B7E]/20"
         onClick={() => {
           console.log('Create Task', { taskName, timeOfDay, startDate, startTime, endDate, endTime, repeat });
           if (onSubmit) onSubmit();

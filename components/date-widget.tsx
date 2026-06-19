@@ -38,7 +38,7 @@ function buildCurrentWeek(): { title: string; monthYear: string; days: CalendarD
   };
 }
 
-export default function DateWidget() {
+export default function DateWidget({ variant = 'card' }: { variant?: 'card' | 'transparent' }) {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toDateString());
   const calendar = buildCurrentWeek();
   
@@ -51,34 +51,38 @@ export default function DateWidget() {
     setMounted(true);
   }, []);
 
+  const containerClasses = variant === 'card' 
+    ? 'w-full max-w-[340px] rounded-[32px] bg-white p-5 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)]' 
+    : 'w-full max-w-[340px] pt-8 px-6 pb-2 text-[#1a1a1a]';
+
   if (!mounted) {
-    return <section className="max-w-md rounded-[40px] bg-white p-6 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)] min-h-[160px]" />; // Skeleton
+    return <section className={`${containerClasses} min-h-[140px]`} />; // Skeleton
   }
 
   return (
-    <section className="max-w-md rounded-[40px] bg-white p-6 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)]">
-      <div className="flex flex-col gap-6">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-[48px] leading-[48px] font-serif font-bold tracking-[-0.02em]">
+    <section className={containerClasses}>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-end justify-between gap-2">
+          <h2 className="text-[36px] leading-[40px] font-serif font-bold tracking-[-0.02em]">
             {displayTitle}
           </h2>
-          <p className="text-sm font-semibold text-[#151515]">{calendar.monthYear}</p>
+          <p className="text-[13px] font-semibold text-[#151515] pb-1">{calendar.monthYear}</p>
         </div>
 
-        <div className="grid grid-cols-7 gap-4">
+        <div className="flex justify-between w-full">
           {calendar.days.map((day) => {
             const isSelected = day.dateString === selectedDate;
             return (
               <button 
                 key={day.label} 
                 onClick={() => setSelectedDate(day.dateString)}
-                className="flex flex-col items-center gap-2 cursor-pointer group"
+                className="flex flex-col items-center gap-1 cursor-pointer group"
               >
-                <span className={`text-[14px] font-semibold transition-colors ${isSelected ? 'text-[#2f685f]' : 'text-[#2f685f]/70 group-hover:text-[#2f685f]'}`}>
+                <span className={`text-[12px] font-semibold transition-colors ${isSelected ? 'text-[#2f685f]' : 'text-[#2f685f]/70 group-hover:text-[#2f685f]'}`}>
                   {day.label}
                 </span>
                 <span
-                  className={`flex h-9 w-9 items-center justify-center rounded-full text-[14px] font-semibold transition-all ${
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold transition-all ${
                     isSelected ? 'bg-[#1a1a1a] text-white shadow-md scale-110' : 'text-[#2f685f] group-hover:bg-[#f0f0f0]'
                   }`}
                 >

@@ -43,43 +43,41 @@ type NavbarProps = {
 
 export default function Navbar({ className = "", menu = "Home", theme = "Dark" }: NavbarProps) {
   const navbarBg = theme === "Dark" ? "bg-[#292929]" : "bg-[#1A1A1A]";
-  const activeIconColor = "text-[#818CF8]"; 
+  const activeIconColor = "text-[#818CF8]";
   const inactiveIconColor = "text-[#E5E7EB] opacity-80 hover:opacity-100 hover:text-white";
-  const activeCircleBg = "bg-black"; 
+  const activeCircleBg = "bg-black";
   const hoverCircleBg = "hover:bg-black/30";
 
   const navItems = [
-    { id: "Home", href: "/menu/home", icon: HomeIcon },
-    { id: "Focus", href: "/menu/focus", icon: HourglassIcon },
-    { id: "Spaces", href: "/menu/spaces", icon: SpacesIcon },
-    { id: "Me", href: "/menu/me", icon: MeIcon },
+    { id: "Home", href: "/dashboard", icon: HomeIcon },
+    { id: "Focus", href: "/focus", icon: HourglassIcon },
+    { id: "Spaces", href: "/spaces", icon: SpacesIcon },
+    { id: "Me", href: "/me", icon: MeIcon },
   ];
 
   return (
-    <nav 
-      className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-2 w-[368px] h-[64px] rounded-[32px] shadow-2xl backdrop-blur-md transition-colors duration-300 ${navbarBg} ${className}`}
+    <nav
+      className={`absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-2 w-[92%] max-w-[340px] h-[60px] rounded-[30px] shadow-2xl backdrop-blur-md transition-colors duration-300 ${navbarBg} ${className}`}
       aria-label="Main Navigation"
     >
       {navItems.map((item) => {
         const isActive = menu === item.id;
         const Icon = item.icon;
-        
+
         return (
           <Link
             key={item.id}
             href={item.href}
-            className={`relative flex items-center justify-center w-[56px] h-[56px] rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
-              isActive ? activeCircleBg : hoverCircleBg
-            }`}
+            className={`relative flex items-center justify-center w-[48px] h-[48px] rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${isActive ? activeCircleBg : hoverCircleBg
+              }`}
             aria-label={item.id}
             aria-current={isActive ? "page" : undefined}
           >
-            <Icon 
-              className={`w-[24px] h-[24px] transition-all duration-300 ${
-                isActive 
-                  ? `${activeIconColor} scale-110 drop-shadow-[0_0_8px_rgba(129,140,248,0.4)]` 
+            <Icon
+              className={`w-[22px] h-[22px] transition-all duration-300 ${isActive
+                  ? `${activeIconColor} scale-110 drop-shadow-[0_0_8px_rgba(129,140,248,0.4)]`
                   : `${inactiveIconColor} hover:scale-105`
-              }`} 
+                }`}
             />
           </Link>
         );

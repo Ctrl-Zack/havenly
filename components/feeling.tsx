@@ -75,7 +75,7 @@ export function Feeling({ onChange }: { onChange?: (emotion: Emotion | null, ene
   };
 
   return (
-    <div className="w-[348px] h-[360px] bg-[#FDEFC8] rounded-[32px] p-[24px] flex flex-col shadow-sm">
+    <div className="w-full max-w-full h-auto min-h-[360px] bg-[#FDEFC8] rounded-[32px] p-[24px] flex flex-col shadow-sm">
       {/* Header */}
       <div className="text-center mt-2">
         <h2 className="font-serif text-[24px] font-semibold text-[#1A1A1A]">How are you feeling?</h2>

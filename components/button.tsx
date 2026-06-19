@@ -9,6 +9,8 @@ type ButtonProps = {
   variant?: "Danger" | "Warning" | "Dark Neutral" | "Neutral" | "Green";
   size?: "default" | "compact" | "icon";
   iconPosition?: "left" | "right";
+  hasIcon?: boolean;
+  onClick?: () => void;
 };
 
 const variantStyles = {
@@ -166,6 +168,8 @@ export default function Button({
   variant = "Danger",
   size = "default",
   iconPosition = "left",
+  hasIcon = true,
+  onClick,
 }: ButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -191,6 +195,7 @@ export default function Button({
       onMouseLeave={() => setIsHovered(false)}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
+      onClick={onClick}
       className={`flex items-center justify-center ${sizeClasses[size]} rounded-[30px] ${isDisabled ? "cursor-not-allowed opacity-70" : "cursor-pointer hover:opacity-95 focus-visible:outline-none"} ${className}`}
       style={{
         backgroundColor: style.backgroundColor,
@@ -201,6 +206,8 @@ export default function Button({
     >
       {size === "icon" ? (
         iconElement
+      ) : !hasIcon ? (
+        <span>{text}</span>
       ) : iconPosition === "left" ? (
         <>
           {iconElement}

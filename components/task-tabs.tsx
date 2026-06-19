@@ -9,7 +9,7 @@ type TaskTabsProps = {
 
 export function TaskTabs({ selectedTab, onTabChange }: TaskTabsProps) {
   return (
-    <div className="relative flex items-center p-1 border border-[#1A1A1A] rounded-[24px] w-full max-w-[348px] h-[52px] shrink-0 bg-[#F2EAE0]">
+    <div className="relative flex items-center p-1 border border-[#1A1A1A] rounded-[24px] w-full shrink-0 h-[52px] bg-[#F2EAE0]">
       
       {/* Sliding Pill Background */}
       <div 
@@ -28,7 +28,7 @@ export function TaskTabs({ selectedTab, onTabChange }: TaskTabsProps) {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3v3m0 12v3M3 12h3m12 0h3M7 7l2 2m6 6l2 2m0-10l-2 2m-6 6l-2 2" />
         </svg>
-        <span className="font-semibold text-[14px]">AI Decomposition</span>
+        <span className="font-semibold text-[14px] whitespace-nowrap">AI Decomposition</span>
       </button>
       
       <button
@@ -44,7 +44,7 @@ export function TaskTabs({ selectedTab, onTabChange }: TaskTabsProps) {
           <line x1="16" y1="17" x2="8" y2="17" />
           <polyline points="10 9 9 9 8 9" />
         </svg>
-        <span className="font-semibold text-[14px]">Manual</span>
+        <span className="font-semibold text-[14px] whitespace-nowrap">Manual</span>
       </button>
     </div>
   );

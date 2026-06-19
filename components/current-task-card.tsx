@@ -1,6 +1,11 @@
 'use client';
 
-export function CurrentTaskCard() {
+type CurrentTaskCardProps = {
+  onPlayClick?: () => void;
+  onViewAllClick?: () => void;
+};
+
+export function CurrentTaskCard({ onPlayClick, onViewAllClick }: CurrentTaskCardProps) {
   return (
     <div className="relative z-0 w-full max-w-[400px] mb-12">
       {/* Main Card */}
@@ -54,7 +59,7 @@ export function CurrentTaskCard() {
               className="group flex h-[4.5rem] w-[4.5rem] shrink-0 items-center justify-center rounded-full bg-[#1a1a1a] transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/20"
               onClick={(e) => {
                 e.preventDefault();
-                console.log('Play button clicked');
+                if (onPlayClick) onPlayClick();
               }}
             >
               <svg
@@ -80,7 +85,7 @@ export function CurrentTaskCard() {
             className="text-[15px] font-medium text-white underline decoration-white/70 underline-offset-4 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded transition-colors"
             onClick={(e) => {
               e.preventDefault();
-              console.log('View All Tasks clicked');
+              if (onViewAllClick) onViewAllClick();
             }}
           >
             View All Tasks

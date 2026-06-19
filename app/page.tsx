@@ -46,8 +46,8 @@ export default function Home() {
   const [isFinishedModalOpen, setFinishedModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-10 px-6 py-12 md:px-10">
+    <div className="min-h-full bg-zinc-950 text-white">
+      <main className="mx-auto flex min-h-full max-w-5xl flex-col gap-10 px-6 py-12 md:px-10">
         <div className="space-y-3">
           <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">Havenly App</p>
           <h1 className="text-4xl font-semibold tracking-tight text-white">Components Preview</h1>

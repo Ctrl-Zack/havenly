@@ -23,8 +23,8 @@ export function ManualTaskModal({ isOpen = true, onClose, onTabSwitch }: ManualT
 
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose} variant="bottom-sheet">
-      <div className="w-full h-[720px] pt-[12px] pb-[20px] px-[20px] flex flex-col items-center overflow-y-auto overflow-x-hidden">
-        
+      <div className="w-full max-h-[85vh] h-[600px] pt-[12px] pb-[20px] px-[20px] flex flex-col items-center overflow-y-auto overflow-x-hidden">
+
         {/* Sliding Tabs */}
         <TaskTabs selectedTab={selectedTab} onTabChange={handleTabChange} />
 

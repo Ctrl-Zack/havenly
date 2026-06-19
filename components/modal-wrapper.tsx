@@ -35,24 +35,26 @@ export function ModalWrapper({ children, isOpen = true, onClose, variant = 'cent
 
   if (!isOpen) return null;
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handlePointerDown = (e: React.PointerEvent) => {
     if (variant !== 'bottom-sheet') return;
-    startY.current = e.touches[0].clientY;
+    startY.current = e.clientY;
     isDragging.current = true;
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current || variant !== 'bottom-sheet') return;
-    const currentY = e.touches[0].clientY;
+    const currentY = e.clientY;
     const deltaY = currentY - startY.current;
     if (deltaY > 0) {
       setOffsetY(deltaY);
     }
   };
 
-  const handleTouchEnd = () => {
+  const handlePointerUp = (e: React.PointerEvent) => {
     if (!isDragging.current || variant !== 'bottom-sheet') return;
     isDragging.current = false;
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     if (offsetY > 100) {
       if (onClose) onClose();
     } else {
@@ -62,7 +64,7 @@ export function ModalWrapper({ children, isOpen = true, onClose, variant = 'cent
 
   return (
     <div 
-      className={`fixed inset-0 z-50 flex ${variant === 'bottom-sheet' ? 'items-end' : 'items-center p-4'} justify-center`}
+      className={`absolute inset-0 z-50 flex ${variant === 'bottom-sheet' ? 'items-end' : 'items-center p-4'} justify-center`}
     >
       {/* Backdrop */}
       <div 
@@ -74,12 +76,15 @@ export function ModalWrapper({ children, isOpen = true, onClose, variant = 'cent
       <div 
         className={`relative z-10 w-full ${variant === 'bottom-sheet' ? 'max-w-md bg-[#F2EAE0] rounded-t-[32px] pb-6' : 'max-w-[390px] bg-[#F2EAE0] rounded-[40px] p-0 shadow-xl overflow-hidden'} flex flex-col items-center animate-in fade-in ${variant === 'bottom-sheet' ? 'slide-in-from-bottom-full' : 'zoom-in-95'} duration-200`}
         style={variant === 'bottom-sheet' ? { transform: `translateY(${offsetY}px)`, transition: isDragging.current ? 'none' : 'transform 0.2s ease-out' } : {}}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {variant === 'bottom-sheet' && (
-          <div className="w-full flex justify-center py-3 cursor-grab active:cursor-grabbing">
+          <div 
+            className="w-full flex justify-center py-3 cursor-grab active:cursor-grabbing shrink-0"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          >
             <div className="h-[5px] w-12 rounded-full bg-[#A5A5A5]" />
           </div>
         )}

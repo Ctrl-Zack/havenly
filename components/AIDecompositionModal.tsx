@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ModalWrapper } from './modal-wrapper';
 import { TaskTabs } from './task-tabs';
 import { AITaskForm } from './ai-task-form';
@@ -13,6 +14,7 @@ type AIDecompositionModalProps = {
 };
 
 export function AIDecompositionModal({ isOpen = true, onClose, onTabSwitch }: AIDecompositionModalProps) {
+  const router = useRouter();
   // Default to AI tab
   const [selectedTab, setSelectedTab] = useState<'ai' | 'manual'>('ai');
 
@@ -23,7 +25,7 @@ export function AIDecompositionModal({ isOpen = true, onClose, onTabSwitch }: AI
 
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose} variant="bottom-sheet">
-      <div className="w-full h-[720px] pt-[12px] pb-[20px] px-[20px] flex flex-col items-center overflow-y-auto overflow-x-hidden">
+      <div className="w-full max-h-[85vh] h-[600px] pt-[12px] pb-[20px] px-[20px] flex flex-col items-center overflow-y-auto overflow-x-hidden">
         
         {/* Sliding Tabs */}
         <TaskTabs selectedTab={selectedTab} onTabChange={handleTabChange} />
@@ -32,7 +34,10 @@ export function AIDecompositionModal({ isOpen = true, onClose, onTabSwitch }: AI
         {selectedTab === 'ai' ? (
           <AITaskForm />
         ) : (
-          <ManualTaskForm onSubmit={onClose} />
+          <ManualTaskForm onSubmit={() => {
+            if (onClose) onClose();
+            router.push('/task/ai-processing');
+          }} />
         )}
 
       </div>

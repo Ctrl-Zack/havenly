@@ -25,7 +25,6 @@ export function RoomTimer({
           if (prev <= 1) {
             clearInterval(interval);
             setIsRunning(false);
-            if (onFinish) onFinish();
             return 0;
           }
           return prev - 1;
@@ -75,7 +74,7 @@ export function RoomTimer({
   const strokeDashoffset = circumference + (percentage / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8 w-full max-w-[320px]">
+    <div className="flex flex-col items-center justify-center gap-4 w-full max-w-[320px]">
       <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0 -rotate-90">
           {/* Background Track Circle */}
@@ -114,29 +113,48 @@ export function RoomTimer({
       </div>
 
       {/* Controls */}
-      <div className="flex items-center gap-4">
-        {!isRunning && timeLeft > 0 ? (
-          <button
-            onClick={handleStart}
-            className="px-6 py-2.5 bg-[#151515] text-white rounded-full font-medium text-[15px] hover:bg-black transition-colors focus:outline-none focus:ring-4 focus:ring-black/20"
-          >
-            {timeLeft === initialSeconds ? 'Start' : 'Resume'}
-          </button>
-        ) : isRunning ? (
+      <div className="flex flex-col gap-5 w-full mt-4">
+        {/* Done Button */}
+        <button
+          onClick={() => {
+            setIsRunning(false);
+            if (onFinish) onFinish();
+          }}
+          className="bg-[#418b7e] hover:opacity-90 transition-opacity flex items-center justify-center gap-2 h-[60px] rounded-[30px] w-full"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" fill="currentColor" className="text-[#f4f9f8]" />
+          </svg>
+          <span className="font-['Poppins',sans-serif] font-semibold text-[16px] text-[#f4f9f8]">
+            Done
+          </span>
+        </button>
+
+        {/* Pause / Resume Button */}
+        {isRunning ? (
           <button
             onClick={handlePause}
-            className="px-6 py-2.5 bg-white border-2 border-[#151515] text-[#151515] rounded-full font-medium text-[15px] hover:bg-black/5 transition-colors focus:outline-none focus:ring-4 focus:ring-black/20"
+            className="bg-[#f8b027] hover:opacity-90 transition-opacity flex items-center justify-center gap-2 h-[60px] rounded-[30px] w-full"
           >
-            Pause
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 19C8 19.5523 7.55228 20 7 20C6.44772 20 6 19.5523 6 19V5C6 4.44772 6.44772 4 7 4C7.55228 4 8 4.44772 8 5V19Z" fill="currentColor" className="text-[#441604]" />
+              <path d="M18 19C18 19.5523 17.5523 20 17 20C16.4477 20 16 19.5523 16 19V5C16 4.44772 16.4477 4 17 4C17.5523 4 18 4.44772 18 5V19Z" fill="currentColor" className="text-[#441604]" />
+            </svg>
+            <span className="font-['Poppins',sans-serif] font-semibold text-[16px] text-[#441604]">
+              Pause
+            </span>
           </button>
-        ) : null}
-
-        {(timeLeft < initialSeconds || isRunning) && (
+        ) : (
           <button
-            onClick={handleReset}
-            className="px-6 py-2.5 bg-transparent text-[#151515] hover:bg-black/5 rounded-full font-medium text-[15px] transition-colors focus:outline-none focus:ring-4 focus:ring-black/10"
+            onClick={handleStart}
+            className="bg-[#f8b027] hover:opacity-90 transition-opacity flex items-center justify-center gap-2 h-[60px] rounded-[30px] w-full"
           >
-            Reset
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 5V19L19 12L8 5Z" fill="currentColor" className="text-[#441604]" />
+            </svg>
+            <span className="font-['Poppins',sans-serif] font-semibold text-[16px] text-[#441604]">
+              Resume
+            </span>
           </button>
         )}
       </div>

@@ -97,24 +97,55 @@ export function Dropdown({
 // ============================================
 // VARIANT 3: EditLabel
 // ============================================
+// ============================================
+// VARIANT 3: EditLabel
+// ============================================
 type EditLabelProps = {
   className?: string;
   task?: string;
+  label?: string;
+  isEditing?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
+  onChange?: (val: string) => void;
+  onSave?: () => void;
+  draggable?: boolean;
+  onDragStart?: React.DragEventHandler<HTMLDivElement>;
+  onDragEnter?: React.DragEventHandler<HTMLDivElement>;
+  onDragOver?: React.DragEventHandler<HTMLDivElement>;
+  onDragEnd?: React.DragEventHandler<HTMLDivElement>;
+  onDrop?: React.DragEventHandler<HTMLDivElement>;
 };
 
 export function EditLabel({
   className,
   task = "Open the Document",
+  label,
+  isEditing,
   onEdit,
   onDelete,
+  onChange,
+  onSave,
+  draggable,
+  onDragStart,
+  onDragEnter,
+  onDragOver,
+  onDragEnd,
+  onDrop,
 }: EditLabelProps) {
   return (
-    <div className={className || "content-stretch flex flex-col items-center justify-center relative w-[368px]"}>
-      <div className="border-2 border-black border-solid content-stretch flex items-center justify-center px-[12px] py-[8px] relative rounded-[24px] shrink-0 w-full gap-[10px]">
+    <div 
+      className={className || "content-stretch flex flex-col items-center justify-center relative w-[368px]"}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnter={onDragEnter}
+      onDragOver={onDragOver}
+      onDragEnd={onDragEnd}
+      onDrop={onDrop}
+    >
+      <div className="border-2 border-black border-solid content-stretch flex items-center justify-center px-[12px] py-[8px] relative rounded-[24px] shrink-0 w-full gap-[10px] bg-transparent">
         {/* Drag Handle Icon */}
-        <div className="flex items-center justify-center shrink-0 size-[24px]">
+        <div className={`flex items-center justify-center shrink-0 size-[24px] ${draggable ? 'cursor-grab active:cursor-grabbing' : ''}`}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="#151515" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="5" r="2" />
             <circle cx="9" cy="12" r="2" />
@@ -127,7 +158,20 @@ export function EditLabel({
 
         {/* Task Text */}
         <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Poppins:Regular'] justify-center leading-[18px] min-w-px not-italic relative text-[#151515] text-[14px]">
-          {task}
+          {isEditing ? (
+            <input 
+              autoFocus
+              className="w-full bg-transparent outline-none border-b border-black/20 text-[#151515]"
+              value={task} 
+              onChange={(e) => onChange?.(e.target.value)} 
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') onSave?.();
+              }}
+              onBlur={() => onSave?.()}
+            />
+          ) : (
+            task
+          )}
         </div>
 
         {/* Edit Icon */}
@@ -137,11 +181,11 @@ export function EditLabel({
             e.preventDefault();
             onEdit?.();
           }}
-          className="flex items-center justify-center shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer"
+          className={`flex items-center justify-center shrink-0 size-[24px] hover:opacity-70 transition-opacity cursor-pointer ${isEditing ? 'text-[#418b7e]' : 'text-black'}`}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="#151515" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
 
@@ -162,6 +206,15 @@ export function EditLabel({
           </svg>
         </button>
       </div>
+
+      {/* Label */}
+      {label && (
+        <div className="absolute bg-[#fcfee8] content-stretch flex items-center left-[20px] px-[4px] top-[-10px]">
+          <div className="[word-break:break-word] flex flex-col font-['Poppins:Regular'] justify-center leading-[16px] not-italic relative shrink-0 text-[#151515] text-[12px] whitespace-nowrap">
+            {label}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

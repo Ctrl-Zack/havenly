@@ -37,10 +37,8 @@ export default function AIProcessingPage() {
     <div className="relative w-full h-full overflow-hidden bg-gradient-to-b from-[#b3dcd1] to-[#418b7e] font-['Poppins',sans-serif] flex flex-col items-center justify-center">
 
       {/* Background blobs / Graphic from Figma */}
-      <div className="absolute inset-0 z-0 mix-blend-overlay opacity-50 pointer-events-none flex items-center justify-center">
-        <div className="relative w-[150%] h-[150%] max-w-[600px] max-h-[800px]">
-          <Image alt="" src="/assets/login-bg-blob.svg" fill className="object-cover" priority />
-        </div>
+      <div className="absolute h-[1100px] left-[-70px] top-[-40px] w-[590px] z-0 pointer-events-none">
+        <Image alt="" src="/assets/ai-loading-bg.svg" fill className="object-cover" priority />
       </div>
 
       {/* Main Content */}
@@ -59,8 +57,8 @@ export default function AIProcessingPage() {
         `}} />
 
         {/* AI Sparkles Icon */}
-        <div className="mb-8 animate-gentle-float text-[#FEFDF6]">
-          <svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="mb-[40px] animate-gentle-float text-[#F2EAE0]">
+          <svg width="160" height="160" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Center large star */}
             <path d="M50 15 C 50 40, 55 45, 80 45 C 55 45, 50 50, 50 75 C 50 50, 45 45, 20 45 C 45 45, 50 40, 50 15 Z" fill="currentColor" />
             {/* Top right small star */}
@@ -71,12 +69,12 @@ export default function AIProcessingPage() {
         </div>
 
         {/* Primary Text (Animated stages) */}
-        <h2 className="font-serif text-[32px] leading-[40px] font-bold text-[#FEFDF6] mb-2 transition-all duration-300">
+        <h2 className="font-serif text-[36px] leading-[46px] font-bold text-[#F2EAE0] mb-0 transition-all duration-300">
           {primaryText}
         </h2>
 
         {/* Secondary Text */}
-        <p className="text-[14px] text-[#FEFDF6]/90 font-medium">
+        <p className="text-[14px] leading-[18px] text-[#F2EAE0] font-normal">
           Making it easy and manageable
         </p>
 

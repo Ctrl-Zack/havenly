@@ -16,7 +16,7 @@ export type TaskProps = {
 export function Task({
   index = 1,
   title = 'Final Project HCI',
-  subtitle = 'Lorem Ipsum Dolor Sit Amet.',
+  subtitle = 'Finish the UI design.',
   variant = 'normal',
   onSeeSubtask,
   className = '',

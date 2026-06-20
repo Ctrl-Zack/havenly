@@ -31,8 +31,8 @@ const generateDummyTasks = (): DummyTask[] => {
 
   tasks.push({
     id: '1',
-    title: 'Final Project Network Programming',
-    subtitle: 'Lorem Ipsum Dolor Sit Amet.',
+    title: 'Final Project Human Computer Interaction',
+    subtitle: 'Create UI/UX Design.',
     date: createDate(0, 3), // Current month, 3rd
     variant: 'normal',
   });
@@ -40,7 +40,7 @@ const generateDummyTasks = (): DummyTask[] => {
   tasks.push({
     id: '2',
     title: 'ITS Website Migration',
-    subtitle: 'Lorem Ipsum Dolor Sit Amet.',
+    subtitle: 'Update Wordpress site.',
     date: createDate(0, 2), // Current month, 2nd
     variant: 'normal',
   });
@@ -48,7 +48,7 @@ const generateDummyTasks = (): DummyTask[] => {
   tasks.push({
     id: '3',
     title: 'Final Project Database Management',
-    subtitle: 'Lorem Ipsum Dolor Sit Amet.',
+    subtitle: 'Create Backend implementation.',
     date: createDate(0, 2), // Current month, 2nd
     variant: 'normal', // Figma shows them all as normal (yellow) on this screen
   });
@@ -56,7 +56,7 @@ const generateDummyTasks = (): DummyTask[] => {
   tasks.push({
     id: '4',
     title: 'Prepare Midterm Materials',
-    subtitle: 'Lorem Ipsum Dolor Sit Amet.',
+    subtitle: 'Review all materials.',
     date: createDate(1, 15), // Next month, 15th
     variant: 'normal',
   });
@@ -64,7 +64,7 @@ const generateDummyTasks = (): DummyTask[] => {
   tasks.push({
     id: '5',
     title: 'Finish UI/UX Design Mockups',
-    subtitle: 'Lorem Ipsum Dolor Sit Amet.',
+    subtitle: 'Continue develop the dashboard page.',
     date: createDate(-1, 28), // Previous month, 28th
     variant: 'normal',
   });

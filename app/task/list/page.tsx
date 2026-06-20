@@ -80,7 +80,7 @@ export default function SubtaskList() {
   };
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-[#b3dcd1] to-[#418b7e] font-['Poppins',sans-serif]">
+    <div className="relative w-full min-h-screen bg-gradient-to-b from-[#b3dcd1] to-[#418b7e] font-['Poppins',sans-serif]">
 
       {/* Main Content Card */}
       <div className="absolute top-[100px] bottom-0 left-0 right-0 bg-[#FCFEE8] rounded-t-[48px] shadow-2xl pt-[40px] px-6 flex flex-col items-center pb-[100px]">
@@ -152,9 +152,9 @@ export default function SubtaskList() {
             <span className="font-semibold text-[16px]">Start First Step</span>
           </button>
         </div>
+      
       </div>
-
-      <Navbar />
+        <Navbar className="!fixed" />
     </div>
   );
 }

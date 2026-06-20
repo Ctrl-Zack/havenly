@@ -1,6 +1,6 @@
-'use client';
-
 import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 
 type MonthSelectorProps = {
   currentDate: Date;
@@ -17,30 +17,65 @@ export function MonthSelector({ currentDate, onPrevMonth, onNextMonth }: MonthSe
   const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 
   return (
-    <div className="flex items-center justify-center gap-4 py-2 mb-8 relative w-full">
-      <button onClick={onPrevMonth} className="p-2 transition-transform hover:scale-110 active:scale-95 text-[#1A1A1A]">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-        </svg>
-      </button>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onPrevMonth} style={styles.arrowButton} activeOpacity={0.7}>
+        <Svg width="12" height="12" viewBox="0 0 24 24" fill="#1A1A1A">
+          <Path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+        </Svg>
+      </TouchableOpacity>
       
-      <div className="flex items-center gap-4">
-        <span className="text-[14px] font-medium text-[#FBDE8C]">
-          {getMonthName(prevMonthDate)}
-        </span>
-        <span className="text-[16px] font-semibold text-[#1A1A1A]">
+      <View style={styles.monthsContainer}>
+        <TouchableOpacity onPress={onPrevMonth} activeOpacity={0.7}>
+          <Text style={styles.sideMonthText}>
+            {getMonthName(prevMonthDate)}
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.centerMonthText}>
           {getMonthName(currentDate)}
-        </span>
-        <span className="text-[14px] font-medium text-[#FBDE8C]">
-          {getMonthName(nextMonthDate)}
-        </span>
-      </div>
+        </Text>
+        <TouchableOpacity onPress={onNextMonth} activeOpacity={0.7}>
+          <Text style={styles.sideMonthText}>
+            {getMonthName(nextMonthDate)}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <button onClick={onNextMonth} className="p-2 transition-transform hover:scale-110 active:scale-95 text-[#1A1A1A]">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-        </svg>
-      </button>
-    </div>
+      <TouchableOpacity onPress={onNextMonth} style={styles.arrowButton} activeOpacity={0.7}>
+        <Svg width="12" height="12" viewBox="0 0 24 24" fill="#1A1A1A">
+          <Path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+        </Svg>
+      </TouchableOpacity>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16, // approximate React web 'gap-4' translates to 16
+    paddingVertical: 8,
+    marginBottom: 32,
+    width: '100%',
+  },
+  arrowButton: {
+    padding: 8,
+  },
+  monthsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  sideMonthText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 14,
+    color: '#FBDE8C',
+  },
+  centerMonthText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    color: '#1A1A1A',
+  }
+});

@@ -1,38 +1,51 @@
-'use client';
-
 import React from 'react';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 export type ProgressProps = {
-  /** The current progress value (0 to max) */
-  value?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | number;
-  /** The maximum number of segments (default: 6) */
+  value?: number;
   max?: number;
-  /** Optional theme override */
   variant?: 'default' | 'warning';
-  className?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
-export function Progress({ value = 0, max = 6, variant = 'default', className = '' }: ProgressProps) {
-  // Determine colors based on variant
-  const activeColor = variant === 'warning' ? 'bg-[#FACE68]' : 'bg-[#418B7E]';
-  const inactiveColor = variant === 'warning' ? 'bg-[#FDEFC8]' : 'bg-[#C7DED9]'; // A light green approx for default
+export function Progress({ value = 0, max = 6, variant = 'default', style }: ProgressProps) {
+  const activeColor = variant === 'warning' ? '#FACE68' : '#418B7E';
+  const inactiveColor = variant === 'warning' ? '#FDEFC8' : '#C7DED9';
 
-  // Ensure value is bounded
   const boundedValue = Math.max(0, Math.min(value, max));
 
   return (
-    <div className={`flex items-center gap-[6px] w-[368px] h-[7px] ${className}`}>
+    <View style={[styles.container, style]}>
       {Array.from({ length: max }).map((_, index) => {
         const isActive = index < boundedValue;
         return (
-          <div
+          <View
             key={index}
-            className={`flex-1 h-full rounded-full transition-colors duration-300 ${isActive ? activeColor : inactiveColor}`}
+            style={[
+              styles.segment,
+              { backgroundColor: isActive ? activeColor : inactiveColor }
+            ]}
           />
         );
       })}
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    height: 7,
+    width: '100%',
+    maxWidth: 368,
+  },
+  segment: {
+    flex: 1,
+    height: '100%',
+    borderRadius: 3.5,
+  }
+});
 
 export default Progress;

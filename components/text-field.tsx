@@ -1,6 +1,6 @@
-'use client';
-
 import React, { useState } from 'react';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Svg, { Path, Circle } from 'react-native-svg';
 
 type TextFieldProps = {
   value: string;
@@ -10,8 +10,6 @@ type TextFieldProps = {
   type?: 'text' | 'password' | 'email';
   label?: string;
   hideSubmitButton?: boolean;
-  containerClassName?: string;
-  inputClassName?: string;
 };
 
 export function TextField({ 
@@ -22,70 +20,117 @@ export function TextField({
   type = 'text',
   label,
   hideSubmitButton = false,
-  containerClassName = "h-[64px] rounded-[32px] pl-5 pr-2",
-  inputClassName = "text-[15px]"
 }: TextFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const inputType = type === 'password' && showPassword ? 'text' : type;
+  const isPassword = type === 'password' && !showPassword;
 
   return (
-    <div className="relative flex flex-col w-full">
+    <View style={styles.container}>
       {label && (
-        <div className="absolute left-[20px] top-[-10px] bg-[#fcfee8] px-[4px] z-10">
-          <span className="font-['Poppins',sans-serif] text-[#151515] text-[12px] leading-[16px] whitespace-nowrap">
-            {label}
-          </span>
-        </div>
+        <View style={styles.labelContainer}>
+          <Text style={styles.labelText}>{label}</Text>
+        </View>
       )}
       
-      <div className={`relative flex items-center w-full max-w-full border-2 border-[#1A1A1A] bg-transparent overflow-hidden focus-within:ring-2 focus-within:ring-black/10 transition-shadow ${containerClassName}`}>
-        <input
-          type={inputType}
+      <View style={styles.inputContainer}>
+        <TextInput
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && onSubmit) {
-              onSubmit();
-            }
-          }}
+          onChangeText={onChange}
           placeholder={placeholder}
-          className={`flex-1 h-full bg-transparent outline-none text-[#1A1A1A] placeholder:text-[#a5a5a5] font-['Poppins',sans-serif] ${inputClassName}`}
+          placeholderTextColor="#a5a5a5"
+          secureTextEntry={isPassword}
+          keyboardType={type === 'email' ? 'email-address' : 'default'}
+          autoCapitalize={type === 'email' ? 'none' : 'sentences'}
+          onSubmitEditing={onSubmit}
+          style={styles.input}
         />
         
         {type === 'password' && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="mr-3 text-[#a5a5a5] hover:text-[#1a1a1a] focus:outline-none"
+          <TouchableOpacity 
+            onPress={() => setShowPassword(!showPassword)}
+            style={styles.iconButton}
           >
             {showPassword ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
-              </svg>
+              <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a5a5a5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <Path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
+              </Svg>
             ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
+              <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a5a5a5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <Path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <Circle cx="12" cy="12" r="3" />
+              </Svg>
             )}
-          </button>
+          </TouchableOpacity>
         )}
 
         {!hideSubmitButton && (
-          <button
-            type="button"
-            onClick={onSubmit}
-            className="w-[40px] h-[40px] shrink-0 bg-[#1A1A1A] rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 focus:outline-none ml-2"
+          <TouchableOpacity
+            onPress={onSubmit}
+            style={styles.submitButton}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14" />
-              <path d="M12 5l7 7-7 7" />
-            </svg>
-          </button>
+            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <Path d="M5 12h14" />
+              <Path d="M12 5l7 7-7 7" />
+            </Svg>
+          </TouchableOpacity>
         )}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    position: 'relative',
+    paddingTop: 8, // Make room for floating label
+  },
+  labelContainer: {
+    position: 'absolute',
+    left: 20,
+    top: 0,
+    backgroundColor: '#fcfee8',
+    paddingHorizontal: 4,
+    zIndex: 10,
+  },
+  labelText: {
+    fontFamily: 'Poppins-Regular',
+    color: '#151515',
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: 52,
+    borderWidth: 2,
+    borderColor: '#1A1A1A',
+    borderRadius: 26,
+    paddingLeft: 20,
+    paddingRight: 8,
+    backgroundColor: 'transparent',
+  },
+  input: {
+    flex: 1,
+    height: '100%',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 15,
+    color: '#1A1A1A',
+  },
+  iconButton: {
+    padding: 8,
+    marginRight: 4,
+  },
+  submitButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+  }
+});
 
 export default TextField;

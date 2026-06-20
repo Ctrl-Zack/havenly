@@ -40,7 +40,7 @@ export default function FocusModePage() {
         </div>
 
         {/* Timer */}
-        <div className="w-full flex justify-center mt-[30px] mb-[5px]">
+        <div className="w-full flex justify-center mt-[45px] mb-[5px]">
           <RoomTimer initialMinutes={1} autoStart={false} onFinish={handleFinish} />
         </div>
 

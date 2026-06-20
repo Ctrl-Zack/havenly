@@ -113,7 +113,7 @@ export function RoomTimer({
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col gap-5 w-full mt-4">
+      <div className="flex flex-col gap-5 w-full mt-18">
         {/* Done Button */}
         <button
           onClick={() => {

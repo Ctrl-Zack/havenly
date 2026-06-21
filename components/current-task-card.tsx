@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { taskStore, ALL_TASKS_INFO } from '@/utils/taskStore';
 
 type CurrentTaskCardProps = {
-  onPlayClick?: () => void;
+  onPlayClick?: (taskId: string) => void;
   onViewAllClick?: () => void;
 };
 
 export function CurrentTaskCard({ onPlayClick, onViewAllClick }: CurrentTaskCardProps) {
+  const [storeVersion, setStoreVersion] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = taskStore.subscribe(() => {
+      setStoreVersion(v => v + 1);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Get the first task that has pending subtasks, fallback to the first defined task
+  const activeTask =
+    ALL_TASKS_INFO.find(t => taskStore.getTasks(t.id).length > 0) ||
+    ALL_TASKS_INFO[0];
+  const subtasks = taskStore.getTasks(activeTask.id);
+  const currentSubtaskText = subtasks[0]?.text || 'No tasks left';
+
   return (
     <View style={styles.container}>
       {/* View All Tasks Button Container (Below Card) */}
@@ -42,29 +59,33 @@ export function CurrentTaskCard({ onPlayClick, onViewAllClick }: CurrentTaskCard
             </Svg>
           </View>
 
-          <View style={styles.mainContentRow}>
-            <View style={styles.textContent}>
-              <Text style={styles.titleText}>Currently In Progress</Text>
-              
-              <View style={styles.taskNameBadge}>
-                <Text style={styles.taskNameText}>Open the Document</Text>
+          <View style={{ gap: 6 }}>
+            <View style={styles.mainContentRow}>
+              <View style={styles.textContent}>
+                <Text style={styles.titleText}>Currently In Progress</Text>
+
+                <View style={styles.taskNameBadge}>
+                  <Text style={styles.taskNameText}>{currentSubtaskText}</Text>
+                </View>
               </View>
-              
-              <Text style={styles.estimationText}>
-                <Text style={styles.estimationLabel}>Estimated: </Text>
-                45 mins
-              </Text>
+
+              {onPlayClick && (
+                <TouchableOpacity
+                  style={styles.playButton}
+                  onPress={() => onPlayClick(activeTask.id)}
+                  activeOpacity={0.8}
+                >
+                  <Svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={styles.playIcon}>
+                    <Path d="M6.5 4.86V19.14C6.5 20.35 7.82 21.09 8.85 20.46L20.53 13.32C21.49 12.73 21.49 11.27 20.53 10.68L8.85 3.54C7.82 2.91 6.5 3.65 6.5 4.86Z" />
+                  </Svg>
+                </TouchableOpacity>
+              )}
             </View>
 
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={onPlayClick}
-              activeOpacity={0.8}
-            >
-              <Svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={styles.playIcon}>
-                <Path d="M6.5 4.86V19.14C6.5 20.35 7.82 21.09 8.85 20.46L20.53 13.32C21.49 12.73 21.49 11.27 20.53 10.68L8.85 3.54C7.82 2.91 6.5 3.65 6.5 4.86Z" />
-              </Svg>
-            </TouchableOpacity>
+            <Text style={styles.estimationText}>
+              <Text style={styles.estimationLabel}>Task: </Text>
+              {activeTask.title}
+            </Text>
           </View>
         </View>
       </View>
@@ -137,8 +158,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   taskNameText: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 17,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 15,
     color: '#000',
   },
   estimationText: {
@@ -159,11 +180,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   playIcon: {
-    marginLeft: 4,
+    marginLeft: 2,
   },
   viewAllWrapper: {
     position: 'absolute',
-    bottom: -32,
+    bottom: -45,
     right: 40,
     zIndex: 0,
   },
@@ -172,8 +193,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 16,
     borderBottomRightRadius: 16,
     paddingHorizontal: 24,
-    paddingBottom: 8,
-    paddingTop: 40, // extra padding to hide behind card
+    paddingBottom: 10,
+    paddingTop: 48,
   },
   viewAllText: {
     fontFamily: 'Poppins-Medium',

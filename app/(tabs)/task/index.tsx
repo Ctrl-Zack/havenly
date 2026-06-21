@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Polyline, Line } from 'react-native-svg';
 import Task, { TaskVariant } from '@/components/task';
+import { taskStore } from '@/utils/taskStore';
 import DateWidget from '@/components/date-widget';
 import { CrisisButton } from '@/components/crisis-button';
 import { MonthSelector } from '@/components/month-selector';
@@ -46,6 +47,14 @@ const isSameMonthAndYear = (d1: Date, d2: Date) => {
 
 export default function TaskPage() {
   const router = useRouter();
+  const [storeVersion, setStoreVersion] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = taskStore.subscribe(() => {
+      setStoreVersion(prev => prev + 1);
+    });
+    return unsubscribe;
+  }, []);
 
   // State for Month Selector
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -137,6 +146,7 @@ export default function TaskPage() {
                         title={task.title}
                         subtitle={task.subtitle}
                         variant={task.variant}
+                        isCompleted={taskStore.getTasks(task.id).length === 0}
                         onSeeSubtask={() => handleSeeSubtask(task.id)}
                       />
                     ))}

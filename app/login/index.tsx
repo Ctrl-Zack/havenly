@@ -202,11 +202,12 @@ const styles = StyleSheet.create({
   },
   actionSection: {
     width: '100%',
-    gap: 24,
+    gap: 12,
     alignItems: 'center',
   },
   buttonGroup: {
     width: '100%',
+    marginTop:-12,
     gap: 16,
   },
   googleButton: {

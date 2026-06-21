@@ -88,30 +88,15 @@ export default function RegisterPage() {
               </View>
             </View>
 
-            {/* Action Buttons */}
             <View style={styles.actionSection}>
-              <Button
-                text="Sign Up"
-                variant="Dark Neutral"
-                size="default"
-                hasIcon={false}
-                onClick={handleSignUp}
-              />
-
-              <View style={styles.dividerRow}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
               <View style={styles.buttonGroup}>
-                <TouchableOpacity 
-                  style={styles.outlineButton}
-                  onPress={handleLogin}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.outlineButtonText}>Login</Text>
-                </TouchableOpacity>
+                <Button
+                  text="Sign Up"
+                  variant="Dark Neutral"
+                  size="default"
+                  hasIcon={false}
+                  onClick={handleSignUp}
+                />
 
                 <TouchableOpacity 
                   style={styles.googleButton}
@@ -124,6 +109,25 @@ export default function RegisterPage() {
                     resizeMode="contain"
                   />
                   <Text style={styles.googleText}>Continue with Google</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.dividerRow}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <View style={styles.bottomGroup}>
+                <Button
+                  text="Login"
+                  variant="Neutral"
+                  size="default"
+                  hasIcon={false}
+                  onClick={handleLogin}
+                />
+                <TouchableOpacity onPress={() => router.push('/home')}>
+                  <Text style={styles.guestText}>Continue as guest</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -168,7 +172,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 326,
     alignItems: 'center',
-    gap: 64,
+    gap: 48,
   },
   formSection: {
     width: '100%',
@@ -195,7 +199,7 @@ const styles = StyleSheet.create({
   },
   actionSection: {
     width: '100%',
-    gap: 24,
+    gap: 12,
     alignItems: 'center',
   },
   dividerRow: {
@@ -219,24 +223,13 @@ const styles = StyleSheet.create({
   },
   buttonGroup: {
     width: '100%',
+    marginTop: -12,
     gap: 16,
-    alignItems: 'center',
   },
-  outlineButton: {
+  bottomGroup: {
     width: '100%',
-    height: 52,
-    borderWidth: 2,
-    borderColor: '#1a1a1a',
-    borderRadius: 30,
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  outlineButtonText: {
-    fontFamily: 'Poppins-SemiBold',
-    color: '#1a1a1a',
-    fontSize: 16,
+    gap: 16,
   },
   googleButton: {
     width: '100%',
@@ -258,5 +251,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: '#1a1a1a',
     fontSize: 14,
+  },
+  guestText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    color: '#767676',
+    textDecorationLine: 'underline',
   }
 });

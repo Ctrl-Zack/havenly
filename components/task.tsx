@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, Polyline } from 'react-native-svg';
 
 export type TaskVariant = 'normal' | 'high-contrast';
 
@@ -10,6 +10,7 @@ export type TaskProps = {
   subtitle?: string;
   variant?: TaskVariant;
   onSeeSubtask?: () => void;
+  isCompleted?: boolean;
 };
 
 export function Task({
@@ -18,20 +19,21 @@ export function Task({
   subtitle = 'Finish the UI design.',
   variant = 'normal',
   onSeeSubtask,
+  isCompleted = false,
 }: TaskProps) {
   const isNormal = variant === 'normal';
 
-  // Normal Variant Colors
-  const cardBg = isNormal ? '#FDEFC8' : '#ffffff';
-  const borderColor = isNormal ? '#FBDE8C' : '#1A1A1A';
-  const textColor = '#1A1A1A';
-  const subtitleColor = isNormal ? 'rgba(26,26,26,0.5)' : 'rgba(26,26,26,0.4)';
-  const cornerBg = isNormal ? '#FDF6E5' : '#1A1A1A';
-  const numberColor = isNormal ? '#1A1A1A' : '#ffffff';
+  // Variant Colors
+  const cardBg = isCompleted ? '#F5F5F5' : (isNormal ? '#FDEFC8' : '#ffffff');
+  const borderColor = isCompleted ? '#E0E0E0' : (isNormal ? '#FBDE8C' : '#1A1A1A');
+  const textColor = isCompleted ? '#555555' : '#1A1A1A';
+  const subtitleColor = isCompleted ? 'rgba(26,26,26,0.4)' : (isNormal ? 'rgba(26,26,26,0.5)' : 'rgba(26,26,26,0.4)');
+  const cornerBg = isCompleted ? '#EAEAEA' : (isNormal ? '#FDF6E5' : '#1A1A1A');
+  const numberColor = isCompleted ? '#767676' : (isNormal ? '#1A1A1A' : '#ffffff');
   const numberCircleBg = isNormal ? 'transparent' : '#ffffff';
-  const numberInnerColor = isNormal ? '#1A1A1A' : '#1A1A1A'; // If not normal, white circle with black text
-  const buttonBg = isNormal ? '#FACE68' : '#1A1A1A';
-  const buttonText = isNormal ? '#1A1A1A' : '#ffffff';
+  const numberInnerColor = isNormal ? '#1A1A1A' : '#1A1A1A';
+  const buttonBg = isCompleted ? '#333333' : (isNormal ? '#FACE68' : '#1A1A1A');
+  const buttonText = isCompleted ? '#ffffff' : (isNormal ? '#1A1A1A' : '#ffffff');
 
   return (
     <View style={[
@@ -55,21 +57,36 @@ export function Task({
 
       {/* Top Row: Button */}
       <View style={styles.topRow}>
-        <TouchableOpacity
-          onPress={onSeeSubtask}
-          activeOpacity={0.8}
-          style={[styles.button, { backgroundColor: buttonBg }]}
-        >
-          <Text style={[styles.buttonText, { color: buttonText }]}>See Subtask</Text>
-          <Svg width="12" height="12" viewBox="0 0 24 24" fill={buttonText} style={{ marginLeft: 6 }}>
-            <Path d="M5 3L19 12L5 21V3Z" />
-          </Svg>
-        </TouchableOpacity>
+        {isCompleted ? (
+          <View style={[styles.button, { backgroundColor: buttonBg, opacity: 0.9 }]}>
+            <Text style={[styles.buttonText, { color: 'white' }]}>Completed</Text>
+            <Svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" style={{ marginLeft: 6 }}>
+              <Polyline points="20 6 9 17 4 12" />
+            </Svg>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={onSeeSubtask}
+            activeOpacity={0.8}
+            style={[styles.button, { backgroundColor: buttonBg }]}
+          >
+            <Text style={[styles.buttonText, { color: buttonText }]}>See Subtask</Text>
+            <Svg width="12" height="12" viewBox="0 0 24 24" fill={buttonText} style={{ marginLeft: 6 }}>
+              <Path d="M5 3L19 12L5 21V3Z" />
+            </Svg>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Bottom Row: Text */}
       <View style={styles.textContainer}>
-        <Text style={[styles.title, { color: textColor }]} numberOfLines={2}>
+        <Text 
+          style={[
+            styles.title, 
+            { color: textColor }
+          ]} 
+          numberOfLines={2}
+        >
           {title}
         </Text>
         <Text style={[styles.subtitle, { color: subtitleColor }]} numberOfLines={1}>
@@ -106,6 +123,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: 64,
     height: 64,
+    borderTopLeftRadius: 27,
     borderBottomRightRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',

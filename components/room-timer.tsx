@@ -5,19 +5,28 @@ import Svg, { Circle, Path } from 'react-native-svg';
 type RoomTimerProps = {
   initialSeconds?: number;
   autoStart?: boolean;
-  onFinish?: () => void;
+  paused?: boolean;
+  onFinish?: (completedEarly?: boolean) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function RoomTimer({
   initialSeconds = 60,
   autoStart = false,
+  paused = false,
   onFinish,
   style,
 }: RoomTimerProps) {
   const totalSeconds = initialSeconds;
   const [timeLeft, setTimeLeft] = useState(totalSeconds);
   const [isRunning, setIsRunning] = useState(autoStart);
+
+  // Pause the timer if paused prop becomes true
+  useEffect(() => {
+    if (paused) {
+      setIsRunning(false);
+    }
+  }, [paused]);
 
   // Update timeLeft if initialSeconds prop changes
   useEffect(() => {
@@ -33,6 +42,11 @@ export function RoomTimer({
           if (prev <= 1) {
             clearInterval(interval);
             setIsRunning(false);
+            if (onFinish) {
+              setTimeout(() => {
+                onFinish(false);
+              }, 0);
+            }
             return 0;
           }
           return prev - 1;
@@ -42,7 +56,7 @@ export function RoomTimer({
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning, timeLeft, onFinish]);
 
   const handleStart = () => setIsRunning(true);
   const handlePause = () => setIsRunning(false);
@@ -120,7 +134,7 @@ export function RoomTimer({
         <TouchableOpacity
           onPress={() => {
             setIsRunning(false);
-            if (onFinish) onFinish();
+            if (onFinish) onFinish(true);
           }}
           style={styles.doneButton}
           activeOpacity={0.7}
@@ -153,7 +167,7 @@ export function RoomTimer({
             <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <Path d="M8 5V19L19 12L8 5Z" fill="#441604" />
             </Svg>
-            <Text style={styles.pauseText}>Resume</Text>
+            <Text style={styles.pauseText}>{timeLeft === totalSeconds ? 'Start' : 'Resume'}</Text>
           </TouchableOpacity>
         )}
       </View>

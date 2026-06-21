@@ -1,5 +1,12 @@
 import { Stack } from 'expo-router';
-import { useFonts, Poppins_400Regular, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
+import { 
+  useFonts, 
+  Poppins_400Regular, 
+  Poppins_500Medium, 
+  Poppins_600SemiBold, 
+  Poppins_700Bold, 
+  Poppins_800ExtraBold 
+} from '@expo-google-fonts/poppins';
 import { SourceSerif4_400Regular, SourceSerif4_600SemiBold, SourceSerif4_700Bold } from '@expo-google-fonts/source-serif-4';
 import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
@@ -18,7 +25,10 @@ export {
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     'Poppins-Regular': Poppins_400Regular,
+    'Poppins-Medium': Poppins_500Medium,
     'Poppins-SemiBold': Poppins_600SemiBold,
+    'Poppins-Bold': Poppins_700Bold,
+    'Poppins-ExtraBold': Poppins_800ExtraBold,
     'SourceSerifPro-Regular': SourceSerif4_400Regular,
     'SourceSerifPro-SemiBold': SourceSerif4_600SemiBold,
     'SourceSerifPro-Bold': SourceSerif4_700Bold,
@@ -48,6 +58,7 @@ export default function RootLayout() {
           <Stack.Screen name="login/index" />
           <Stack.Screen name="register/index" />
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="spaces/[id]" />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>

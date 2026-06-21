@@ -1,85 +1,28 @@
-import React, { useRef, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Animated } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Svg, G, Path } from 'react-native-svg';
+import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { G, Path } from 'react-native-svg';
-
-import DateWidget from '@/components/date-widget';
-import { CurrentTaskCard } from '@/components/current-task-card';
-import { Plan } from '@/components/plan';
+import { RoomsList, RoomType } from '@/components/rooms';
 import { CrisisButton } from '@/components/crisis-button';
-import { ManualTaskModal, BottomSheetRef } from '@/components/ManualTaskModal';
 
-const { width, height } = Dimensions.get('window');
-
-export default function Home() {
+export default function RoomsPage() {
   const router = useRouter();
-  const { openAddTask } = useLocalSearchParams<{ openAddTask?: string }>();
-  const bottomSheetModalRef = useRef<BottomSheetRef>(null);
 
-  // Animation values
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
-
-  useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        bounciness: 8,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [fadeAnim, slideAnim]);
-
-  const handleOpenModal = () => {
-    bottomSheetModalRef.current?.present();
-  };
-
-  useEffect(() => {
-    if (openAddTask === 'true') {
-      const timer = setTimeout(() => {
-        handleOpenModal();
-      }, 350);
-      return () => clearTimeout(timer);
-    }
-  }, [openAddTask]);
-
-  const handleCrisisClick = () => {
-    router.push('/crisis-mode' as any);
-  };
-
-  const handlePlayTask = (taskId?: string) => {
+  const handleRoomSelect = (roomId: RoomType) => {
     router.push({
-      pathname: '/timer',
-      params: taskId ? { taskId } : {}
+      pathname: '/spaces/[id]',
+      params: { id: roomId }
     });
   };
 
-  const handleViewAllTasks = () => {
-    router.push('/task' as any);
-  };
-
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+    <View style={styles.container}>
+      {/* Top green gradient background */}
       <LinearGradient
         colors={['#b3dcd1', '#418b7e']}
         style={StyleSheet.absoluteFillObject}
       />
-      
-
-      {/* Decorative Blob */}
-      <View style={styles.blobContainer} pointerEvents="none">
-        {/* <Image source={require('@/public/assets/login-bg-blob.svg')} style={styles.blobImage} /> */}
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-      
       {/* Background blob */}
       <View style={styles.blobContainer} pointerEvents="none">
         <Svg width="100%" height="100%" viewBox="0 0 345 319" fill="none">
@@ -92,52 +35,65 @@ export default function Home() {
         </Svg>
       </View>
 
-        {/* Top Header Section */}
-        <Animated.View style={[styles.topSection, { opacity: fadeAnim }]}>
-          <View style={styles.crisisWrapper}>
-            <CrisisButton onClick={handleCrisisClick} />
-          </View>
-          
-          <View style={styles.dateWidgetWrapper}>
-            <DateWidget variant="transparent" />
-          </View>
-        </Animated.View>
+      {/* Floating Crisis Help button in top-left */}
+      <View style={styles.topSection}>
+        <CrisisButton onClick={() => router.push('/crisis-mode' as any)} />
+      </View>
 
-        {/* Bottom Container Overlay */}
-        <Animated.View 
-          style={[
-            styles.bottomCardContainer, 
-            { 
-              opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }] 
-            }
-          ]}
+      {/* Main card sheet */}
+      <View style={styles.sheet}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
         >
-          <LinearGradient
-            colors={['rgb(252, 254, 232)', 'rgb(151, 152, 139)']}
-            locations={[0.766, 1.36]}
-            style={styles.bottomCardGradient}
-          >
-            <View style={styles.bottomCardContent}>
-              <CurrentTaskCard onPlayClick={handlePlayTask} onViewAllClick={handleViewAllTasks} />
+          <View style={styles.header}>
+            <Text style={styles.title}>Focus Rooms</Text>
+            <Text style={styles.subtitle}>Work silently alongside others.</Text>
+          </View>
 
-              <Plan onAddClick={handleOpenModal} />
-            </View>
-          </LinearGradient>
-        </Animated.View>
-
-      </ScrollView>
-
-      {/* Add Task Modal */}
-      <ManualTaskModal ref={bottomSheetModalRef} />
-    </SafeAreaView>
+          <RoomsList onRoomSelect={handleRoomSelect} />
+        </ScrollView>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#b3dcd1',
+  },
+  topSection: {
+    position: 'absolute',
+    top: 54,
+    left: 24,
+    zIndex: 10,
+  },
+  sheet: {
+    flex: 1,
+    backgroundColor: '#FAF7EE',
+    borderTopLeftRadius: 36,
+    borderTopRightRadius: 36,
+    marginTop: 130, 
+    overflow: 'hidden',
+  },
+  scrollContent: {
+    padding: 24,
+    paddingTop: 32,
+    paddingBottom: 120,
+  },
+  header: {
+    marginBottom: 24,
+  },
+  title: {
+    fontFamily: 'SourceSerifPro-Bold',
+    fontSize: 32,
+    color: '#151515',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+    color: '#767676',
   },
   blobContainer: {
     position: 'absolute',
@@ -145,56 +101,6 @@ const styles = StyleSheet.create({
     left: -81,
     top: -72,
     width: 345,
-    opacity: 0.5, // mix-blend-overlay approximation
+    opacity: 0.5,
   },
-  scrollContent: {
-    flexGrow: 1,
-    alignItems: 'center',
-    paddingBottom: 0, 
-  },
-  topSection: {
-    width: '100%',
-    maxWidth: 400,
-    alignItems: 'center',
-    paddingTop: 20,
-    zIndex: 20,
-  },
-  crisisWrapper: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 30,
-  },
-  dateWidgetWrapper: {
-    width: '100%',
-    marginTop: 60,
-    alignItems: 'center',
-  },
-  bottomCardContainer: {
-    flex: 1, // Let it expand
-    width: '100%',
-    maxWidth: 400,
-    marginTop: 40,
-    borderTopLeftRadius: 48,
-    borderTopRightRadius: 48,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 40,
-    elevation: 10,
-    minHeight: 600,
-  },
-  bottomCardGradient: {
-    flex: 1,
-    paddingTop: 32,
-    paddingBottom: 180,
-    alignItems: 'center',
-  },
-  bottomCardContent: {
-    width: '100%',
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    gap: 32,
-  }
 });

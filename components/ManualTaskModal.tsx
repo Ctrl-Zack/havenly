@@ -98,6 +98,7 @@ export const ManualTaskModal = forwardRef<BottomSheetRef, ManualTaskModalProps>(
         transparent
         animationType="fade"
         onRequestClose={dismiss}
+        statusBarTranslucent
       >
         <View style={styles.overlay}>
           {/* Background overlay to dismiss */}

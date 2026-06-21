@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: '100%',
-    backgroundColor: '#F2EAE0',
+    backgroundColor: '#FCFEE8',
     overflow: 'hidden',
   },
   bottomSheetContainer: {

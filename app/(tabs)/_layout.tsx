@@ -43,7 +43,7 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
   const icons = {
     home: HomeIcon,
     timer: HourglassIcon,
-    people: SpacesIcon,
+    spaces: SpacesIcon,
     me: MeIcon,
   };
 
@@ -110,7 +110,7 @@ export default function TabLayout() {
           tabBarStyle: { display: 'none' }
         }} 
       />
-      <Tabs.Screen name="people" />
+      <Tabs.Screen name="spaces" />
       <Tabs.Screen name="me" />
       <Tabs.Screen 
         name="task/index" 

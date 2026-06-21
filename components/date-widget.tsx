@@ -1,6 +1,5 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 
 const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -45,54 +44,139 @@ export default function DateWidget({ variant = 'card' }: { variant?: 'card' | 't
   const selectedDayObj = calendar.days.find(d => d.dateString === selectedDate);
   const displayTitle = selectedDayObj ? selectedDayObj.fullDate.toLocaleDateString('en-US', { weekday: 'long' }) : calendar.title;
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const containerClasses = variant === 'card' 
-    ? 'w-full max-w-[340px] rounded-[32px] bg-white p-5 text-[#1a1a1a] shadow-[0_24px_60px_rgba(0,0,0,0.12)]' 
-    : 'w-full max-w-[340px] pt-8 px-6 pb-2 text-[#1a1a1a]';
-
-  if (!mounted) {
-    return <section className={`${containerClasses} min-h-[140px]`} />; // Skeleton
-  }
+  const isCard = variant === 'card';
 
   return (
-    <section className={containerClasses}>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-2">
-          <h2 className="text-[36px] leading-[40px] font-serif font-bold tracking-[-0.02em]">
-            {displayTitle}
-          </h2>
-          <p className="text-[13px] font-semibold text-[#151515] pb-1">{calendar.monthYear}</p>
-        </div>
+    <View style={[styles.container, isCard ? styles.cardContainer : styles.transparentContainer]}>
+      <View style={styles.contentWrapper}>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>{displayTitle}</Text>
+          <Text style={styles.monthYear}>{calendar.monthYear}</Text>
+        </View>
 
-        <div className="flex justify-between w-full">
+        <View style={styles.daysRow}>
           {calendar.days.map((day) => {
             const isSelected = day.dateString === selectedDate;
             return (
-              <button 
+              <TouchableOpacity 
                 key={day.label} 
-                onClick={() => setSelectedDate(day.dateString)}
-                className="flex flex-col items-center gap-1 cursor-pointer group"
+                onPress={() => setSelectedDate(day.dateString)}
+                activeOpacity={0.7}
+                style={styles.dayColumn}
               >
-                <span className={`text-[12px] font-semibold transition-colors ${isSelected ? 'text-[#2f685f]' : 'text-[#2f685f]/70 group-hover:text-[#2f685f]'}`}>
+                <Text style={[styles.dayLabel, isSelected ? styles.dayLabelSelected : styles.dayLabelUnselected]}>
                   {day.label}
-                </span>
-                <span
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold transition-all ${
-                    isSelected ? 'bg-[#1a1a1a] text-white shadow-md scale-110' : 'text-[#2f685f] group-hover:bg-[#f0f0f0]'
-                  }`}
-                >
-                  {day.date}
-                </span>
-              </button>
+                </Text>
+                <View style={[styles.dateCircle, isSelected ? styles.dateCircleSelected : styles.dateCircleUnselected]}>
+                  <Text style={[styles.dateText, isSelected ? styles.dateTextSelected : styles.dateTextUnselected]}>
+                    {day.date}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             );
           })}
-        </div>
-      </div>
-    </section>
+        </View>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    maxWidth: 340,
+  },
+  cardContainer: {
+    borderRadius: 32,
+    backgroundColor: '#ffffff',
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 24 },
+    shadowOpacity: 0.12,
+    shadowRadius: 60,
+    elevation: 10,
+  },
+  transparentContainer: {
+    paddingTop: 32,
+    paddingHorizontal: 24,
+    paddingBottom: 8,
+  },
+  contentWrapper: {
+    flexDirection: 'column',
+    gap: 16,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  title: {
+    fontFamily: 'SourceSerifPro-Bold',
+    fontSize: 36,
+    lineHeight: 40,
+    color: '#1a1a1a',
+    letterSpacing: -0.02 * 36,
+  },
+  monthYear: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 13,
+    color: '#151515',
+    paddingBottom: 4,
+  },
+  daysRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  dayColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 4,
+  },
+  dayLabel: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 12,
+  },
+  dayLabelSelected: {
+    color: '#2f685f',
+  },
+  dayLabelUnselected: {
+    color: 'rgba(47, 104, 95, 0.7)',
+  },
+  dateCircle: {
+    height: 32,
+    width: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 16,
+  },
+  dateCircleSelected: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: 999,
+    overflow: 'hidden',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  dateCircleUnselected: {
+    backgroundColor: 'transparent',
+  },
+  dateText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 13,
+  },
+  dateTextSelected: {
+    color: '#ffffff',
+  },
+  dateTextUnselected: {
+    color: '#2f685f',
+  }
+});

@@ -1,12 +1,13 @@
-'use client';
-
 import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Svg, { Path, Circle as SvgCircle, Polyline } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ModalWrapper } from './modal-wrapper';
 
 type TimerModalProps = {
   isOpen?: boolean;
   onClose?: () => void;
-  onStart?: (hours: number, minutes: number) => void;
+  onStart?: (hours: number, minutes: number, seconds: number) => void;
 };
 
 export function TimerModal({ isOpen = true, onClose, onStart }: TimerModalProps) {
@@ -52,127 +53,215 @@ export function TimerModal({ isOpen = true, onClose, onStart }: TimerModalProps)
     }
   };
 
-  const totalSeconds = hour * 3600 + minute * 60 + second;
-  let displayTitle = '';
   const parts = [];
-
-  if (hour > 0)
-     parts.push(`${hour} hr`);
-
-  if (minute > 0)
-    parts.push(`${minute} min`);
-
-  if (second > 0)
-    parts.push(`${second} sec`);
-
-  displayTitle = parts.join(' ');
+  if (hour > 0) parts.push(`${hour} hr`);
+  if (minute > 0) parts.push(`${minute} min`);
+  if (second > 0) parts.push(`${second} sec`);
+  if (parts.length === 0) parts.push('0 sec');
+  
+  const displayTitle = parts.join(' ');
 
   return (
-    <ModalWrapper isOpen={isOpen} onClose={onClose} variant="bottom-sheet">
-      <div className="w-full pt-[12px] pb-[24px] px-[24px] flex flex-col items-center">
+    <ModalWrapper isOpen={isOpen} onClose={onClose} variant="bottom-sheet" useGradient={true}>
+      <View style={styles.container}>
         
         {/* Header */}
-        <div className="w-full flex items-center justify-center relative mb-8">
-          <div className="absolute left-0">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v4" />
-              <path d="M12 18v4" />
-              <path d="M4.93 4.93l2.83 2.83" />
-              <path d="M16.24 16.24l2.83 2.83" />
-              <path d="M2 12h4" />
-              <path d="M18 12h4" />
-              <path d="M4.93 19.07l2.83-2.83" />
-              <path d="M16.24 7.76l2.83-2.83" />
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 8v4l3 3" />
-            </svg>
-          </div>
-          <h2 className="font-serif text-[28px] font-bold text-[#1A1A1A]">
-            {displayTitle}
-          </h2>
-        </div>
+        <View style={styles.header}>
+          <View style={styles.iconContainer}>
+            <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <Path d="M12 2v4" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M12 18v4" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M4.93 4.93l2.83 2.83" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M16.24 16.24l2.83 2.83" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M2 12h4" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M18 12h4" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M4.93 19.07l2.83-2.83" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M16.24 7.76l2.83-2.83" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <SvgCircle cx="12" cy="12" r="10" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <Path d="M12 8v4l3 3" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </Svg>
+          </View>
+          <Text style={styles.titleText}>{displayTitle}</Text>
+        </View>
 
         {/* Time Selector */}
-        <div className="w-full h-[120px] bg-[#FDEFC8] rounded-[32px] flex items-center justify-center border border-[#1A1A1A]/5 shadow-sm mb-8">
-          <div className="flex items-center gap-6 font-serif text-[32px] font-bold text-[#1A1A1A]">
-            
-            {/* Hours */}
-            <div className="flex flex-col items-center gap-2">
-              <button onClick={() => adjustTime('hour', 1)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="18 15 12 9 6 15" />
-                </svg>
-              </button>
-              <span className="w-[50px] text-center">{hour.toString().padStart(2, '0')}</span>
-              <button onClick={() => adjustTime('hour', -1)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
+        <View style={styles.selectorBox}>
+          
+          {/* Hours */}
+          <View style={styles.pickerColumn}>
+            <TouchableOpacity onPress={() => adjustTime('hour', 1)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="18 15 12 9 6 15" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+            <Text style={styles.pickerText}>{hour.toString().padStart(2, '0')}</Text>
+            <TouchableOpacity onPress={() => adjustTime('hour', -1)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="6 9 12 15 18 9" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+          </View>
 
-            <span className="mb-1">:</span>
+          <Text style={styles.colon}>:</Text>
 
-            {/* Minutes */}
-            <div className="flex flex-col items-center gap-2">
-              <button onClick={() => adjustTime('minute', 5)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="18 15 12 9 6 15" />
-                </svg>
-              </button>
-              <span className="w-[50px] text-center">{minute.toString().padStart(2, '0')}</span>
-              <button onClick={() => adjustTime('minute', -5)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
+          {/* Minutes */}
+          <View style={styles.pickerColumn}>
+            <TouchableOpacity onPress={() => adjustTime('minute', 5)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="18 15 12 9 6 15" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+            <Text style={styles.pickerText}>{minute.toString().padStart(2, '0')}</Text>
+            <TouchableOpacity onPress={() => adjustTime('minute', -5)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="6 9 12 15 18 9" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+          </View>
 
-            <span className="mb-1">:</span>
+          <Text style={styles.colon}>:</Text>
 
-            {/* Seconds */}
-            <div className="flex flex-col items-center gap-2">
-              <button onClick={() => adjustTime('second', 5)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="18 15 12 9 6 15" />
-                </svg>
-              </button>
-              <span className="w-[50px] text-center">{second.toString().padStart(2, '0')}</span>
-              <button onClick={() => adjustTime('second', -5)} className="text-[#1A1A1A] hover:scale-125 transition-transform focus:outline-none">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-            </div>
+          {/* Seconds */}
+          <View style={styles.pickerColumn}>
+            <TouchableOpacity onPress={() => adjustTime('second', 5)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="18 15 12 9 6 15" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+            <Text style={styles.pickerText}>{second.toString().padStart(2, '0')}</Text>
+            <TouchableOpacity onPress={() => adjustTime('second', -5)} activeOpacity={0.7} style={styles.arrowButton}>
+              <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <Polyline points="6 9 12 15 18 9" stroke="#FBDE8C" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </Svg>
+            </TouchableOpacity>
+          </View>
 
-          </div>
-        </div>
+        </View>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-4 w-full">
-          <button
-            onClick={onClose}
-            className="flex-1 h-[56px] rounded-full border-2 border-[#1A1A1A] bg-transparent flex items-center justify-center text-[#1A1A1A] font-semibold text-[16px] hover:bg-black/5 active:bg-black/10 transition-colors focus:outline-none focus:ring-4 focus:ring-black/10"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => {
-              if (onStart) onStart(hour, minute);
+        <View style={styles.actionRow}>
+          <TouchableOpacity onPress={onClose} style={styles.cancelBtn} activeOpacity={0.7}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            onPress={() => {
+              if (onStart) onStart(hour, minute, second);
               if (onClose) onClose();
-            }}
-            className="flex-1 h-[56px] rounded-full bg-[#1A1A1A] flex items-center justify-center gap-2 text-white font-semibold text-[16px] hover:bg-black active:scale-[0.98] transition-all focus:outline-none focus:ring-4 focus:ring-black/20"
+            }} 
+            style={styles.startBtn} 
+            activeOpacity={0.8}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5 3L19 12L5 21V3Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Let's Go
-          </button>
-        </div>
+            <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <Path d="M5 3L19 12L5 21V3Z" fill="#fff" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </Svg>
+            <Text style={styles.startText}>Let's Go</Text>
+          </TouchableOpacity>
+        </View>
 
-      </div>
+      </View>
     </ModalWrapper>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    paddingTop: 12,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    overflow: 'hidden', // to ensure gradient doesn't bleed out if needed
+  },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 32,
+    position: 'relative',
+    zIndex: 10,
+  },
+  iconContainer: {
+    position: 'absolute',
+    left: 0,
+  },
+  titleText: {
+    fontFamily: 'SourceSerifPro-Bold',
+    fontSize: 28,
+    color: '#1A1A1A',
+  },
+  selectorBox: {
+    width: '100%',
+    height: 120,
+    backgroundColor: '#FDEFC8',
+    borderRadius: 34,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: '#FBDE8C',
+    marginBottom: 32,
+    zIndex: 10,
+  },
+  pickerColumn: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
+  },
+  arrowButton: {
+    padding: 4,
+  },
+  pickerText: {
+    fontFamily: 'SourceSerifPro-Bold',
+    fontSize: 32,
+    color: '#1A1A1A',
+    width: 50,
+    textAlign: 'center',
+  },
+  colon: {
+    fontFamily: 'SourceSerif4-Bold',
+    fontSize: 32,
+    color: '#1A1A1A',
+    marginHorizontal: 12,
+    marginBottom: 4,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    gap: 16,
+    zIndex: 10,
+  },
+  cancelBtn: {
+    flex: 1,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
+    borderColor: '#1A1A1A',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    color: '#1A1A1A',
+  },
+  startBtn: {
+    flex: 1,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#1A1A1A',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  startText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    color: '#fff',
+  }
+});
 
 export default TimerModal;

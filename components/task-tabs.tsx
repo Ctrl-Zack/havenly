@@ -1,6 +1,6 @@
-'use client';
-
 import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 
 type TaskTabsProps = {
   selectedTab: 'ai' | 'manual';
@@ -9,43 +9,71 @@ type TaskTabsProps = {
 
 export function TaskTabs({ selectedTab, onTabChange }: TaskTabsProps) {
   return (
-    <div className="relative flex items-center p-1 border border-[#1A1A1A] rounded-[24px] w-full shrink-0 h-[52px] bg-[#F2EAE0]">
-      
-      {/* Sliding Pill Background */}
-      <div 
-        className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-[#1A1A1A] rounded-[20px] transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-        style={{
-          transform: selectedTab === 'ai' ? 'translateX(0)' : 'translateX(100%)',
-        }}
-      />
-
-      <button
-        onClick={() => onTabChange('ai')}
-        className={`relative z-10 flex-1 flex items-center justify-center gap-2 h-full rounded-[20px] transition-colors duration-300 ${
-          selectedTab === 'ai' ? 'text-white' : 'text-[#1A1A1A] hover:bg-black/5'
-        }`}
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => onTabChange('ai')}
+        activeOpacity={0.8}
+        style={[
+          styles.tabButton,
+          selectedTab === 'ai' ? styles.tabButtonActive : styles.tabButtonInactive
+        ]}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 3v3m0 12v3M3 12h3m12 0h3M7 7l2 2m6 6l2 2m0-10l-2 2m-6 6l-2 2" />
-        </svg>
-        <span className="font-semibold text-[14px] whitespace-nowrap">AI Decomposition</span>
-      </button>
+        <Svg width="18" height="18" viewBox="0 0 24 24" fill={selectedTab === 'ai' ? 'white' : '#1A1A1A'}>
+          <Path d="M19 8l-1.12-2.38L15.5 4.5l2.38-1.12L19 1l1.12 2.38L22.5 4.5l-2.38 1.12L19 8zm-8 14l-2.25-4.75L4 15l4.75-2.25L11 8l2.25 4.75L18 15l-4.75 2.25L11 22z" />
+        </Svg>
+        <Text style={[styles.tabText, { color: selectedTab === 'ai' ? 'white' : '#1A1A1A' }]} numberOfLines={1}>
+          AI Decomposition
+        </Text>
+      </TouchableOpacity>
       
-      <button
-        onClick={() => onTabChange('manual')}
-        className={`relative z-10 flex-1 flex items-center justify-center gap-2 h-full rounded-[20px] transition-colors duration-300 ${
-          selectedTab === 'manual' ? 'text-white' : 'text-[#1A1A1A] hover:bg-black/5'
-        }`}
+      <TouchableOpacity
+        onPress={() => onTabChange('manual')}
+        activeOpacity={0.8}
+        style={[
+          styles.tabButton,
+          selectedTab === 'manual' ? styles.tabButtonActive : styles.tabButtonInactive
+        ]}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
-        <span className="font-semibold text-[14px] whitespace-nowrap">Manual</span>
-      </button>
-    </div>
+        <Svg width="18" height="18" viewBox="0 0 24 24" fill={selectedTab === 'manual' ? 'white' : '#1A1A1A'}>
+          <Path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z" />
+        </Svg>
+        <Text style={[styles.tabText, { color: selectedTab === 'manual' ? 'white' : '#1A1A1A' }]} numberOfLines={1}>
+          Manual
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    width: '100%',
+    paddingVertical: 4,
+    marginBottom: 8,
+  },
+  tabButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    height: 48,
+    paddingHorizontal: 20,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: '#1A1A1A',
+  },
+  tabButtonActive: {
+    backgroundColor: '#1A1A1A',
+  },
+  tabButtonInactive: {
+    backgroundColor: 'transparent',
+  },
+  tabText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+  }
+});

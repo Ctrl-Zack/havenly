@@ -1,8 +1,11 @@
-'use client';
-import { useState } from "react";
+import React from 'react';
+import { TouchableOpacity, Text, View, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 
 type ButtonProps = {
-  className?: string;
+  className?: string; // Kept for compatibility but we will primarily use style
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   text?: string;
   ariaLabel?: string;
   state?: "Active" | "Default" | "Disabled";
@@ -15,153 +18,43 @@ type ButtonProps = {
 
 const variantStyles = {
   Danger: {
-    Active: {
-      backgroundColor: "#db2727",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
-    Default: {
-      backgroundColor: "#ef4b4b",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
-    Disabled: {
-      backgroundColor: "#fee2e2",
-      text: "#7f1d1d",
-      border: "transparent",
-      icon: "#7f1d1d",
-    },
+    Active: { backgroundColor: "#db2727", text: "#ffffff", border: "transparent", icon: "#ffffff" },
+    Default: { backgroundColor: "#ef4b4b", text: "#ffffff", border: "transparent", icon: "#ffffff" },
+    Disabled: { backgroundColor: "#fee2e2", text: "#7f1d1d", border: "transparent", icon: "#7f1d1d" },
   },
   Warning: {
-    Active: {
-      backgroundColor: "#f28e0e",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
-    Default: {
-      backgroundColor: "#f8b027",
-      text: "#441604",
-      border: "transparent",
-      icon: "#441604",
-    },
-    Disabled: {
-      backgroundColor: "#fbde8c",
-      text: "#441604",
-      border: "transparent",
-      icon: "#441604",
-    },
+    Active: { backgroundColor: "#f28e0e", text: "#ffffff", border: "transparent", icon: "#ffffff" },
+    Default: { backgroundColor: "#f8b027", text: "#441604", border: "transparent", icon: "#441604" },
+    Disabled: { backgroundColor: "#fbde8c", text: "#441604", border: "transparent", icon: "#441604" },
   },
   "Dark Neutral": {
-    Active: {
-      backgroundColor: "#000000",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
-    Default: {
-      backgroundColor: "#1a1a1a",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
-    Disabled: {
-      backgroundColor: "#767676",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
+    Active: { backgroundColor: "#000000", text: "#ffffff", border: "transparent", icon: "#ffffff" },
+    Default: { backgroundColor: "#1a1a1a", text: "#ffffff", border: "transparent", icon: "#ffffff" },
+    Disabled: { backgroundColor: "#767676", text: "#ffffff", border: "transparent", icon: "#ffffff" },
   },
   Neutral: {
-    Active: {
-      backgroundColor: "transparent",
-      text: "#1a1a1a",
-      border: "#000000",
-      icon: "#000000",
-    },
-    Default: {
-      backgroundColor: "transparent",
-      text: "#1a1a1a",
-      border: "#1a1a1a",
-      icon: "#1a1a1a",
-    },
-    Disabled: {
-      backgroundColor: "transparent",
-      text: "#a5a5a5",
-      border: "#a5a5a5",
-      icon: "#a5a5a5",
-    },
+    Active: { backgroundColor: "transparent", text: "#1a1a1a", border: "#000000", icon: "#000000" },
+    Default: { backgroundColor: "transparent", text: "#1a1a1a", border: "#1a1a1a", icon: "#1a1a1a" },
+    Disabled: { backgroundColor: "transparent", text: "#a5a5a5", border: "#a5a5a5", icon: "#a5a5a5" },
   },
   Green: {
-    Active: {
-      backgroundColor: "#2f685f",
-      text: "#f4f9f8",
-      border: "transparent",
-      icon: "#f4f9f8",
-    },
-    Default: {
-      backgroundColor: "#418b7e",
-      text: "#f4f9f8",
-      border: "transparent",
-      icon: "#f4f9f8",
-    },
-    Disabled: {
-      backgroundColor: "#b3dcd1",
-      text: "#ffffff",
-      border: "transparent",
-      icon: "#ffffff",
-    },
+    Active: { backgroundColor: "#2f685f", text: "#f4f9f8", border: "transparent", icon: "#f4f9f8" },
+    Default: { backgroundColor: "#418b7e", text: "#f4f9f8", border: "transparent", icon: "#f4f9f8" },
+    Disabled: { backgroundColor: "#b3dcd1", text: "#ffffff", border: "transparent", icon: "#ffffff" },
   },
 };
 
-const iconSvg = (fill: string) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="h-5 w-5">
-    <path d="M6.5 11.5L10 4.5H14L17.5 11.5H14V18H10V11.5H6.5Z" fill={fill} />
-    <path d="M12 2L8 11H16L12 2Z" fill={fill} opacity="0.2" />
-  </svg>
+const IconSvg = ({ fill }: { fill: string }) => (
+  <Svg viewBox="0 0 24 24" fill="none" style={styles.icon}>
+    <Path d="M6.5 11.5L10 4.5H14L17.5 11.5H14V18H10V11.5H6.5Z" fill={fill} />
+    <Path d="M12 2L8 11H16L12 2Z" fill={fill} opacity={0.2} />
+  </Svg>
 );
 
-const hoverStyles = {
-  Danger: {
-    Active: { backgroundColor: "#c22121" },
-    Default: { backgroundColor: "#d6401b" },
-  },
-  Warning: {
-    Active: { backgroundColor: "#d7760d" },
-    Default: { backgroundColor: "#d2940d" },
-  },
-  "Dark Neutral": {
-    Active: { backgroundColor: "#111111" },
-    Default: { backgroundColor: "#141414" },
-  },
-  Neutral: {
-    Active: { backgroundColor: "#00000008" },
-    Default: { backgroundColor: "#00000006" },
-  },
-  Green: {
-    Active: { backgroundColor: "#28594f" },
-    Default: { backgroundColor: "#377164" },
-  },
-};
-
-const focusStyles = {
-  Danger: { boxShadow: "0 0 0 4px rgba(255,255,255,0.18)" },
-  Warning: { boxShadow: "0 0 0 4px rgba(255,255,255,0.18)" },
-  "Dark Neutral": { boxShadow: "0 0 0 4px rgba(255,255,255,0.22)" },
-  Neutral: { boxShadow: "0 0 0 4px rgba(165,165,165,0.32)" },
-  Green: { boxShadow: "0 0 0 4px rgba(244,249,248,0.24)" },
-};
-
-const sizeClasses = {
-  default: "min-h-15 w-full max-w-90 px-6 py-4 gap-3 rounded-[30px] text-base",
-  compact: "min-h-12 w-full max-w-[240px] px-4 py-3 gap-2 rounded-[26px] text-sm",
-  icon: "h-12 w-12 min-w-0 px-0 py-0 gap-0 rounded-full text-base",
-};
-
 export default function Button({
-  className = "",
+  className,
+  style: customStyle,
+  textStyle: customTextStyle,
   text = "Crisis Help",
   ariaLabel,
   state = "Default",
@@ -171,54 +64,93 @@ export default function Button({
   hasIcon = true,
   onClick,
 }: ButtonProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-
   const isDisabled = state === "Disabled";
   const baseStyle = variantStyles[variant][isDisabled ? "Disabled" : "Default"];
-  const activeStyle = variantStyles[variant].Active;
-  const forceActive = state === "Active";
-  const interactionStyle = {
-    ...((isHovered || forceActive) && !isDisabled ? activeStyle : {}),
-    ...(isFocused && !isDisabled ? focusStyles[variant] : {}),
-  };
-
-  const style = { ...baseStyle, ...interactionStyle };
-  const iconElement = iconSvg(style.icon);
 
   return (
-    <button
-      type="button"
+    <TouchableOpacity
       disabled={isDisabled}
-      aria-label={size === "icon" ? ariaLabel ?? text : undefined}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      onClick={onClick}
-      className={`flex items-center justify-center ${sizeClasses[size]} rounded-[30px] ${isDisabled ? "cursor-not-allowed opacity-70" : "cursor-pointer hover:opacity-95 focus-visible:outline-none"} ${className}`}
-      style={{
-        backgroundColor: style.backgroundColor,
-        color: style.text,
-        border: style.border === "transparent" ? "1px solid transparent" : `1px solid ${style.border}`,
-        ...interactionStyle,
-      }}
+      accessibilityLabel={size === "icon" ? ariaLabel ?? text : undefined}
+      onPress={onClick}
+      activeOpacity={0.8}
+      style={[
+        styles.base,
+        styles[size],
+        {
+          backgroundColor: baseStyle.backgroundColor,
+          borderColor: baseStyle.border === "transparent" ? "transparent" : baseStyle.border,
+          borderWidth: baseStyle.border === "transparent" ? 0 : 1,
+          opacity: isDisabled ? 0.7 : 1,
+        },
+        customStyle,
+      ]}
     >
-      {size === "icon" ? (
-        iconElement
-      ) : !hasIcon ? (
-        <span>{text}</span>
-      ) : iconPosition === "left" ? (
-        <>
-          {iconElement}
-          <span>{text}</span>
-        </>
-      ) : (
-        <>
-          <span>{text}</span>
-          {iconElement}
-        </>
-      )}
-    </button>
+      <View style={styles.contentContainer}>
+        {size === "icon" ? (
+          <IconSvg fill={baseStyle.icon} />
+        ) : !hasIcon ? (
+          <Text style={[styles.text, styles[`text_${size}`], { color: baseStyle.text }, customTextStyle]}>{text}</Text>
+        ) : iconPosition === "left" ? (
+          <>
+            <IconSvg fill={baseStyle.icon} />
+            <Text style={[styles.text, styles[`text_${size}`], { color: baseStyle.text, marginLeft: 8 }, customTextStyle]}>{text}</Text>
+          </>
+        ) : (
+          <>
+            <Text style={[styles.text, styles[`text_${size}`], { color: baseStyle.text, marginRight: 8 }, customTextStyle]}>{text}</Text>
+            <IconSvg fill={baseStyle.icon} />
+          </>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  base: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  default: {
+    minHeight: 60,
+    width: '100%',
+    maxWidth: 360,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 30,
+  },
+  compact: {
+    minHeight: 48,
+    width: '100%',
+    maxWidth: 240,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 26,
+  },
+  icon: {
+    height: 48,
+    width: 48,
+    borderRadius: 24,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontFamily: 'Poppins-Regular',
+    textAlign: 'center',
+  },
+  text_default: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  text_compact: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  text_icon: {
+    fontSize: 16,
+  }
+});

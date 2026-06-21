@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "havenly",
+    "slug": "havenly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "havenly",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset",
+      "@react-native-community/datetimepicker"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

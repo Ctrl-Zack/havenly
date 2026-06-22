@@ -6,6 +6,7 @@ import Button from '@/components/button';
 import TextField from '@/components/text-field';
 import Checkbox from '@/components/checkbox';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { settingsStore, generateRandomUsername } from '@/utils/settingsStore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,10 +17,17 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = () => {
+    settingsStore.updateSettings({ isGuest: false, username: 'John Doe' });
     router.push('/home');
   };
 
   const handleGoogleLogin = () => {
+    settingsStore.updateSettings({ isGuest: false, username: 'John Doe' });
+    router.push('/home');
+  };
+
+  const handleGuest = () => {
+    settingsStore.updateSettings({ isGuest: true, username: generateRandomUsername() });
     router.push('/home');
   };
 
@@ -127,7 +135,7 @@ export default function LoginPage() {
                   hasIcon={false}
                   onClick={handleSignUp}
                 />
-                <TouchableOpacity onPress={() => router.push('/home')}>
+                <TouchableOpacity onPress={handleGuest}>
                   <Text style={styles.guestText}>Continue as guest</Text>
                 </TouchableOpacity>
               </View>

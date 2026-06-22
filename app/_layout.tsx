@@ -22,6 +22,8 @@ export {
   ErrorBoundary,
 } from 'expo-router';
 
+import { ThemeProvider } from '@/theme/ThemeContext';
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     'Poppins-Regular': Poppins_400Regular,
@@ -49,18 +51,20 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <StatusBar style="auto" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="onboarding/index" />
-          <Stack.Screen name="login/index" />
-          <Stack.Screen name="register/index" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="spaces/[id]" />
-        </Stack>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ThemeProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <StatusBar style="auto" />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="onboarding/index" />
+            <Stack.Screen name="login/index" />
+            <Stack.Screen name="register/index" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="spaces/[id]" />
+          </Stack>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

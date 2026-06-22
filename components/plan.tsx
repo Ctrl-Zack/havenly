@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Defs, ClipPath, Path, G, Rect } from 'react-native-svg';
+import { useTheme } from '@/theme/ThemeContext';
 
 export function Plan({ onAddClick }: { onAddClick?: () => void }) {
   const containerWidth = Math.min(Dimensions.get('window').width - 32, 400); // 32 is roughly horizontal padding
   const containerHeight = containerWidth * (190 / 368);
+  
+  const { colors, settings } = useTheme();
+  const isDark = settings.appearance === 'dark';
 
   return (
     <View style={[styles.container, { width: containerWidth, height: containerHeight }]}>
@@ -50,11 +54,15 @@ export function Plan({ onAddClick }: { onAddClick?: () => void }) {
         onPress={onAddClick}
         style={[
           styles.actionButton,
-          { width: containerWidth * 0.217, height: containerWidth * 0.217 }
+          { 
+            width: containerWidth * 0.217, 
+            height: containerWidth * 0.217,
+            backgroundColor: isDark ? colors.text : '#151515' 
+          }
         ]}
       >
         <Svg width="40%" height="40%" viewBox="0 0 24 24" fill="none">
-          <Path d="M12 5V19M5 12H19" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M12 5V19M5 12H19" stroke={isDark ? colors.background : "white"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         </Svg>
       </TouchableOpacity>
     </View>

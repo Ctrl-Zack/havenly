@@ -49,8 +49,8 @@ export default function Navbar({ style, menu = "Home", theme = "Dark" }: NavbarP
   const inactiveIconColor = "rgba(229,231,235,0.8)";
 
   const navItems = [
-    { id: "Home", href: "/dashboard", icon: HomeIcon },
-    { id: "Focus", href: "/focus", icon: HourglassIcon },
+    { id: "Home", href: "/home", icon: HomeIcon },
+    { id: "Focus", href: "/timer", icon: HourglassIcon },
     { id: "Spaces", href: "/spaces", icon: SpacesIcon },
     { id: "Me", href: "/me", icon: MeIcon },
   ];

@@ -9,6 +9,7 @@ import { taskStore } from '@/utils/taskStore';
 import DateWidget from '@/components/date-widget';
 import { CrisisButton } from '@/components/crisis-button';
 import { MonthSelector } from '@/components/month-selector';
+import { useTheme } from '@/theme/ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,6 +49,7 @@ const isSameMonthAndYear = (d1: Date, d2: Date) => {
 export default function TaskPage() {
   const router = useRouter();
   const [storeVersion, setStoreVersion] = useState(0);
+  const { colors, scale } = useTheme();
 
   useEffect(() => {
     const unsubscribe = taskStore.subscribe(() => {
@@ -93,8 +95,8 @@ export default function TaskPage() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      <LinearGradient colors={['#b3dcd1', '#418b7e']} style={StyleSheet.absoluteFillObject} />
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.secondary }]} edges={['top', 'bottom']}>
+      <LinearGradient colors={[colors.secondary, colors.primary]} style={StyleSheet.absoluteFillObject} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         
@@ -110,7 +112,7 @@ export default function TaskPage() {
         </View>
 
         {/* Bottom White Container with Tasks */}
-        <View style={styles.bottomCardContainer}>
+        <View style={[styles.bottomCardContainer, { backgroundColor: colors.background }]}>
           <View style={styles.bottomCardContent}>
             <MonthSelector
               currentDate={currentDate}
@@ -120,24 +122,24 @@ export default function TaskPage() {
 
             {filteredTasks.length === 0 ? (
               <View style={styles.emptyStateContainer}>
-                <Svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5, marginBottom: 16 }}>
+                <Svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke={colors.text} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5, marginBottom: 16 }}>
                   <Path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <Polyline points="14 2 14 8 20 8" />
                   <Line x1="16" y1="13" x2="8" y2="13" />
                   <Line x1="16" y1="17" x2="8" y2="17" />
                   <Polyline points="10 9 9 9 8 9" />
                 </Svg>
-                <Text style={styles.emptyStateTitle}>No tasks for this month</Text>
-                <Text style={styles.emptyStateSubtitle}>Start planning your goals!</Text>
+                <Text style={[styles.emptyStateTitle, { color: colors.text, fontSize: 18 * scale }]}>No tasks for this month</Text>
+                <Text style={[styles.emptyStateSubtitle, { color: colors.textSecondary, fontSize: 14 * scale }]}>Start planning your goals!</Text>
 
-                <TouchableOpacity style={styles.createTaskButton} onPress={handleCreateTask}>
+                <TouchableOpacity style={[styles.createTaskButton, { backgroundColor: colors.primary }]} onPress={handleCreateTask}>
                   <Text style={styles.createTaskButtonText}>Create Task</Text>
                 </TouchableOpacity>
               </View>
             ) : (
               Object.entries(groupedTasks).map(([dateStr, tasks]) => (
                 <View key={dateStr} style={styles.dateGroup}>
-                  <Text style={styles.dateGroupText}>{dateStr}</Text>
+                  <Text style={[styles.dateGroupText, { color: colors.text, fontSize: 14 * scale }]}>{dateStr}</Text>
                   <View style={styles.tasksList}>
                     {tasks.map((task, index) => (
                       <Task

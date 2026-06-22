@@ -13,7 +13,7 @@ import { FinishedTaskModal } from '@/components/FinishedTaskModal';
 export default function FocusModePage() {
   const router = useRouter();
   const navigation = useNavigation();
-  const { hours, minutes, seconds, taskId: paramTaskId } = useGlobalSearchParams<{ hours?: string, minutes?: string, seconds?: string, taskId?: string }>();
+  const { hours, minutes, seconds, taskId: paramTaskId, autoStart } = useGlobalSearchParams<{ hours?: string, minutes?: string, seconds?: string, taskId?: string, autoStart?: string }>();
 
   const [isPaused, setIsPaused] = useState(false);
 
@@ -76,6 +76,10 @@ export default function FocusModePage() {
     return (h * 3600) + (m * 60) + s;
   }, [hours, minutes, seconds]);
 
+  useEffect(() => {
+    taskStore.setLastFocusState(initialTotalSeconds, taskId);
+  }, [initialTotalSeconds, taskId]);
+
   const focusDurationString = useMemo(() => {
     const h = parseInt(hours || '0', 10);
     const m = parseInt(minutes || '0', 10);
@@ -129,7 +133,12 @@ export default function FocusModePage() {
 
         {/* Timer */}
         <View style={styles.timerContainer}>
-          <RoomTimer initialSeconds={initialTotalSeconds} autoStart={false} onFinish={handleFinish} paused={isPaused} />
+          <RoomTimer 
+            initialSeconds={initialTotalSeconds} 
+            autoStart={autoStart === 'true'} 
+            onFinish={handleFinish} 
+            paused={isPaused} 
+          />
         </View>
 
         {/* Exit Focus Mode */}

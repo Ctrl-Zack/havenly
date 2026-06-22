@@ -51,6 +51,9 @@ let taskMap: Record<string, Subtask[]> = {
   ]
 };
 
+let lastFocusDuration: number = 1500;
+let lastFocusTaskId: string = '1';
+
 let listeners: (() => void)[] = [];
 
 export const taskStore = {
@@ -99,5 +102,18 @@ export const taskStore = {
       }
     }
     return null;
+  },
+
+  // Focus Timer States
+  getLastFocusState() {
+    return {
+      duration: lastFocusDuration,
+      taskId: lastFocusTaskId,
+    };
+  },
+  setLastFocusState(duration: number, taskId: string) {
+    lastFocusDuration = duration;
+    lastFocusTaskId = taskId;
+    this.notify();
   }
 };

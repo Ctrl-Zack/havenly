@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     top: -8,
-    backgroundColor: '#FCFEE8', // Matches gradient top color to hide the border line behind text
+    backgroundColor: '#FCFEE8',
     paddingHorizontal: 4,
     zIndex: 10,
   },

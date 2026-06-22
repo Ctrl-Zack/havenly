@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { useTheme } from '@/theme/ThemeContext';
 
 const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -45,13 +46,15 @@ export default function DateWidget({ variant = 'card' }: { variant?: 'card' | 't
   const displayTitle = selectedDayObj ? selectedDayObj.fullDate.toLocaleDateString('en-US', { weekday: 'long' }) : calendar.title;
 
   const isCard = variant === 'card';
+  const { colors, settings, scale } = useTheme();
+  const isDark = settings.appearance === 'dark';
 
   return (
     <View style={[styles.container, isCard ? styles.cardContainer : styles.transparentContainer]}>
       <View style={styles.contentWrapper}>
         <View style={styles.headerRow}>
-          <Text style={styles.title}>{displayTitle}</Text>
-          <Text style={styles.monthYear}>{calendar.monthYear}</Text>
+          <Text style={[styles.title, { color: isCard ? '#1a1a1a' : colors.text, fontSize: 36 * scale }]}>{displayTitle}</Text>
+          <Text style={[styles.monthYear, { color: isCard ? '#151515' : colors.textSecondary, fontSize: 13 * scale }]}>{calendar.monthYear}</Text>
         </View>
 
         <View style={styles.daysRow}>
@@ -64,11 +67,26 @@ export default function DateWidget({ variant = 'card' }: { variant?: 'card' | 't
                 activeOpacity={0.7}
                 style={styles.dayColumn}
               >
-                <Text style={[styles.dayLabel, isSelected ? styles.dayLabelSelected : styles.dayLabelUnselected]}>
+                <Text style={[
+                  styles.dayLabel, 
+                  { fontSize: 12 * scale },
+                  isSelected 
+                    ? { color: isCard ? '#2f685f' : colors.text }
+                    : { color: isCard ? 'rgba(47, 104, 95, 0.7)' : colors.textSecondary }
+                ]}>
                   {day.label}
                 </Text>
-                <View style={[styles.dateCircle, isSelected ? styles.dateCircleSelected : styles.dateCircleUnselected]}>
-                  <Text style={[styles.dateText, isSelected ? styles.dateTextSelected : styles.dateTextUnselected]}>
+                <View style={[
+                  styles.dateCircle, 
+                  isSelected ? [styles.dateCircleSelected, { backgroundColor: isCard ? '#1a1a1a' : colors.text }] : styles.dateCircleUnselected
+                ]}>
+                  <Text style={[
+                    styles.dateText, 
+                    { fontSize: 13 * scale },
+                    isSelected 
+                      ? { color: isCard ? '#ffffff' : colors.background }
+                      : { color: isCard ? '#2f685f' : colors.textSecondary }
+                  ]}>
                     {day.date}
                   </Text>
                 </View>

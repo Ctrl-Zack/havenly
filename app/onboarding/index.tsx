@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     position: 'absolute',
-    top: 56,
+    top: 67,
     alignSelf: 'center',
     alignItems: 'center',
   },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   bottomCardGradient: {
     flex: 1,
-    paddingTop: 99,
+    paddingTop: 80,
     alignItems: 'center',
   },
   cardContent: {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { taskStore, ALL_TASKS_INFO } from '@/utils/taskStore';
+import { useTheme } from '@/theme/ThemeContext';
 
 type CurrentTaskCardProps = {
   onPlayClick?: (taskId: string) => void;
@@ -24,6 +25,9 @@ export function CurrentTaskCard({ onPlayClick, onViewAllClick }: CurrentTaskCard
     ALL_TASKS_INFO[0];
   const subtasks = taskStore.getTasks(activeTask.id);
   const currentSubtaskText = subtasks[0]?.text || 'No tasks left';
+
+  const { colors, settings } = useTheme();
+  const isDark = settings.appearance === 'dark';
 
   return (
     <View style={styles.container}>
@@ -71,11 +75,11 @@ export function CurrentTaskCard({ onPlayClick, onViewAllClick }: CurrentTaskCard
 
               {onPlayClick && (
                 <TouchableOpacity
-                  style={styles.playButton}
+                  style={[styles.playButton, { backgroundColor: isDark ? colors.text : '#1a1a1a' }]}
                   onPress={() => onPlayClick(activeTask.id)}
                   activeOpacity={0.8}
                 >
-                  <Svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={styles.playIcon}>
+                  <Svg width="20" height="20" viewBox="0 0 24 24" fill={isDark ? colors.background : "white"} style={styles.playIcon}>
                     <Path d="M6.5 4.86V19.14C6.5 20.35 7.82 21.09 8.85 20.46L20.53 13.32C21.49 12.73 21.49 11.27 20.53 10.68L8.85 3.54C7.82 2.91 6.5 3.65 6.5 4.86Z" />
                   </Svg>
                 </TouchableOpacity>

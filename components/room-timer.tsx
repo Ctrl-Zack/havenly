@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
+import { useTheme } from '@/theme/ThemeContext';
 
 type RoomTimerProps = {
   initialSeconds?: number;
@@ -20,6 +21,9 @@ export function RoomTimer({
   const totalSeconds = initialSeconds;
   const [timeLeft, setTimeLeft] = useState(totalSeconds);
   const [isRunning, setIsRunning] = useState(autoStart);
+  
+  const { colors, settings, scale } = useTheme();
+  const isDark = settings.appearance === 'dark';
 
   // Pause the timer if paused prop becomes true
   useEffect(() => {
@@ -122,7 +126,14 @@ export function RoomTimer({
         
         {/* Time Text */}
         <View style={styles.timeTextContainer}>
-          <Text style={styles.timeText}>
+          <Text style={[
+            styles.timeText, 
+            { 
+              color: isDark ? colors.text : '#151515',
+              fontSize: 56 * scale,
+              lineHeight: 56 * scale
+            }
+          ]}>
             {formattedTime}
           </Text>
         </View>

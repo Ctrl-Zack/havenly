@@ -72,7 +72,11 @@ const ParkVector = () => (
   </View>
 );
 
+import { useTheme } from '@/theme/ThemeContext';
+
 export function RoomsList({ onRoomSelect }: RoomsListProps) {
+  const { scale } = useTheme();
+
   const rooms: RoomConfig[] = [
     {
       id: "library",
@@ -82,7 +86,7 @@ export function RoomsList({ onRoomSelect }: RoomsListProps) {
       iconBg: '#E8D5BF',
       textColor: '#3D2010',
       subtitleColor: '#6B4C3E',
-      icon: <Ionicons name="book" size={22} color="#3D2010" />,
+      icon: <Ionicons name="book" size={22 * scale} color="#3D2010" />,
       vector: <LibraryVector />,
     },
     {
@@ -93,7 +97,7 @@ export function RoomsList({ onRoomSelect }: RoomsListProps) {
       iconBg: '#DCDFF8',
       textColor: '#1E2A6E',
       subtitleColor: '#4050A0',
-      icon: <Ionicons name="cafe" size={22} color="#1E2A6E" />,
+      icon: <Ionicons name="cafe" size={22 * scale} color="#1E2A6E" />,
       vector: <CafeVector />,
     },
     {
@@ -104,7 +108,7 @@ export function RoomsList({ onRoomSelect }: RoomsListProps) {
       iconBg: '#FFF3D0',
       textColor: '#6B4A00',
       subtitleColor: '#9A7520',
-      icon: <Ionicons name="school" size={22} color="#6B4A00" />,
+      icon: <Ionicons name="school" size={22 * scale} color="#6B4A00" />,
       vector: <StudyVector />,
     },
     {
@@ -115,7 +119,7 @@ export function RoomsList({ onRoomSelect }: RoomsListProps) {
       iconBg: '#D0E8E0',
       textColor: '#1A3D30',
       subtitleColor: '#3A6858',
-      icon: <MaterialCommunityIcons name="tree" size={22} color="#1A3D30" />,
+      icon: <MaterialCommunityIcons name="tree" size={22 * scale} color="#1A3D30" />,
       vector: <ParkVector />,
     }
   ];
@@ -140,15 +144,15 @@ export function RoomsList({ onRoomSelect }: RoomsListProps) {
             {/* Decorative vector */}
             {room.vector}
 
-            <View style={[styles.iconContainer, { backgroundColor: room.iconBg }]}>
+            <View style={[styles.iconContainer, { width: 44 * scale, height: 44 * scale, borderRadius: 22 * scale, backgroundColor: room.iconBg }]}>
               {room.icon}
             </View>
 
             <View style={styles.textContainer}>
-              <Text style={[styles.title, { color: room.textColor }]}>
+              <Text style={[styles.title, { color: room.textColor, fontSize: 22 * scale, lineHeight: 28 * scale }]}>
                 {room.title}
               </Text>
-              <Text style={[styles.subtitle, { color: room.subtitleColor }]}>
+              <Text style={[styles.subtitle, { color: room.subtitleColor, fontSize: 14 * scale }]}>
                 {room.peopleCount} people
               </Text>
             </View>

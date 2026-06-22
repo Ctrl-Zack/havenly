@@ -6,6 +6,7 @@ import Button from '@/components/button';
 import TextField from '@/components/text-field';
 import Progress from '@/components/progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { settingsStore, generateRandomUsername } from '@/utils/settingsStore';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
 
   const handleSignUp = () => {
-    router.push('/login');
+    router.push('/register/appearance');
   };
 
   const handleLogin = () => {
@@ -22,6 +23,11 @@ export default function RegisterPage() {
   };
 
   const handleGoogleLogin = () => {
+    router.push('/register/appearance');
+  };
+
+  const handleGuest = () => {
+    settingsStore.updateSettings({ isGuest: true, username: generateRandomUsername() });
     router.push('/home');
   };
 
@@ -40,7 +46,7 @@ export default function RegisterPage() {
 
       {/* Progress Bar */}
       <View style={styles.progressContainer}>
-        <Progress value={1} max={6} />
+        <Progress value={1} max={7} />
       </View>
 
       <KeyboardAvoidingView 
@@ -108,7 +114,7 @@ export default function RegisterPage() {
                     style={styles.googleIcon}
                     resizeMode="contain"
                   />
-                  <Text style={styles.googleText}>Continue with Google</Text>
+                  <Text style={styles.googleText}>Sign up with Google</Text>
                 </TouchableOpacity>
               </View>
 
@@ -126,7 +132,7 @@ export default function RegisterPage() {
                   hasIcon={false}
                   onClick={handleLogin}
                 />
-                <TouchableOpacity onPress={() => router.push('/home')}>
+                <TouchableOpacity onPress={handleGuest}>
                   <Text style={styles.guestText}>Continue as guest</Text>
                 </TouchableOpacity>
               </View>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { useTheme } from '@/theme/ThemeContext';
 
 type MonthSelectorProps = {
   currentDate: Date;
@@ -13,35 +14,37 @@ const getMonthName = (date: Date) => {
 };
 
 export function MonthSelector({ currentDate, onPrevMonth, onNextMonth }: MonthSelectorProps) {
+  const { colors, scale } = useTheme();
+  
   const prevMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
   const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPrevMonth} style={styles.arrowButton} activeOpacity={0.7}>
-        <Svg width="12" height="12" viewBox="0 0 24 24" fill="#1A1A1A">
+        <Svg width="12" height="12" viewBox="0 0 24 24" fill={colors.text}>
           <Path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
         </Svg>
       </TouchableOpacity>
       
       <View style={styles.monthsContainer}>
         <TouchableOpacity onPress={onPrevMonth} activeOpacity={0.7}>
-          <Text style={styles.sideMonthText}>
+          <Text style={[styles.sideMonthText, { fontSize: 14 * scale }]}>
             {getMonthName(prevMonthDate)}
           </Text>
         </TouchableOpacity>
-        <Text style={styles.centerMonthText}>
+        <Text style={[styles.centerMonthText, { color: colors.text, fontSize: 16 * scale }]}>
           {getMonthName(currentDate)}
         </Text>
         <TouchableOpacity onPress={onNextMonth} activeOpacity={0.7}>
-          <Text style={styles.sideMonthText}>
+          <Text style={[styles.sideMonthText, { fontSize: 14 * scale }]}>
             {getMonthName(nextMonthDate)}
           </Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity onPress={onNextMonth} style={styles.arrowButton} activeOpacity={0.7}>
-        <Svg width="12" height="12" viewBox="0 0 24 24" fill="#1A1A1A">
+        <Svg width="12" height="12" viewBox="0 0 24 24" fill={colors.text}>
           <Path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
         </Svg>
       </TouchableOpacity>

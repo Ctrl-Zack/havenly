@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Svg, { Path, Polyline } from 'react-native-svg';
+import { useTheme } from '@/theme/ThemeContext';
 
 export type TaskVariant = 'normal' | 'high-contrast';
 
@@ -21,19 +22,21 @@ export function Task({
   onSeeSubtask,
   isCompleted = false,
 }: TaskProps) {
+  const { colors, settings } = useTheme();
+  const isDark = settings.appearance === 'dark';
   const isNormal = variant === 'normal';
 
   // Variant Colors
-  const cardBg = isCompleted ? '#F5F5F5' : (isNormal ? '#FDEFC8' : '#ffffff');
-  const borderColor = isCompleted ? '#E0E0E0' : (isNormal ? '#FBDE8C' : '#1A1A1A');
-  const textColor = isCompleted ? '#555555' : '#1A1A1A';
-  const subtitleColor = isCompleted ? 'rgba(26,26,26,0.4)' : (isNormal ? 'rgba(26,26,26,0.5)' : 'rgba(26,26,26,0.4)');
-  const cornerBg = isCompleted ? '#EAEAEA' : (isNormal ? '#FDF6E5' : '#1A1A1A');
-  const numberColor = isCompleted ? '#767676' : (isNormal ? '#1A1A1A' : '#ffffff');
-  const numberCircleBg = isNormal ? 'transparent' : '#ffffff';
-  const numberInnerColor = isNormal ? '#1A1A1A' : '#1A1A1A';
-  const buttonBg = isCompleted ? '#333333' : (isNormal ? '#FACE68' : '#1A1A1A');
-  const buttonText = isCompleted ? '#ffffff' : (isNormal ? '#1A1A1A' : '#ffffff');
+  const cardBg = isCompleted ? (isDark ? colors.surface : '#F5F5F5') : (isDark ? colors.surface : (isNormal ? '#FDEFC8' : '#ffffff'));
+  const borderColor = isCompleted ? colors.border : (isDark ? colors.border : (isNormal ? '#FBDE8C' : '#1A1A1A'));
+  const textColor = isCompleted ? colors.textSecondary : colors.text;
+  const subtitleColor = isCompleted ? colors.textSecondary : colors.textSecondary;
+  const cornerBg = isCompleted ? (isDark ? colors.background : '#EAEAEA') : (isDark ? colors.background : (isNormal ? '#FDF6E5' : '#1A1A1A'));
+  const numberColor = isCompleted ? colors.textSecondary : (isDark ? colors.text : (isNormal ? '#1A1A1A' : '#ffffff'));
+  const numberCircleBg = isNormal ? 'transparent' : (isDark ? colors.text : '#ffffff');
+  const numberInnerColor = isNormal ? colors.text : (isDark ? colors.background : '#1A1A1A');
+  const buttonBg = isCompleted ? (isDark ? colors.background : '#333333') : (isDark ? colors.primary : (isNormal ? '#FACE68' : '#1A1A1A'));
+  const buttonText = isCompleted ? (isDark ? colors.textSecondary : '#ffffff') : (isDark ? '#fff' : (isNormal ? '#1A1A1A' : '#ffffff'));
 
   return (
     <View style={[
